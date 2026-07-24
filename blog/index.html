@@ -104,6 +104,20 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-con
   <div class="wrap">
     <div id="soro-blog"></div>
     <script src="https://app.trysoro.com/api/embed/a4b15ddd-bcef-4fae-88b7-d9ce5ebb8a2b?theme=dark" defer></script>
+    <script>
+    // Kart tıklamalarını widget'ın SPA yönlendirmesinden önce yakala:
+    // gerçek sayfa geçişi yap (her makale kendi URL'inde açılır — geri tuşu,
+    // paylaşım ve SEO doğal çalışır). Capture fazı widget'tan önce koşar.
+    document.addEventListener('click', function(e){
+      var a = e.target.closest && e.target.closest('#soro-blog a[href]');
+      if(!a) return;
+      var href = a.getAttribute('href');
+      if(!href || href.charAt(0) === '#') return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      window.location.href = href;
+    }, true);
+    </script>
   </div>
 </main>
 <footer>
