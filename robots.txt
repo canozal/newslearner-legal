@@ -18,3 +18,5 @@ Disallow: /wp-admin
 Disallow: /admin
 Disallow: /login
 Disallow: /secret-base
+
+Sitemap: https://newslearner.com/sitemap.xml
