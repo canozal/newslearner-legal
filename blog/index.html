@@ -71,8 +71,10 @@ h1{font-weight:800;font-size:clamp(2rem,5vw,3.2rem);letter-spacing:-.02em;line-h
   border:1px solid var(--line) !important; border-radius:999px !important;
   padding:9px 18px !important; font-weight:600 !important}
 #soro-blog .soro-blog-header{background:transparent !important}
-#soro-blog a, #soro-blog .soro-blog-card a{text-decoration:none !important}
-#soro-blog .soro-blog-content a{text-decoration:underline !important}
+#soro-blog a, #soro-blog a *, #soro-blog .soro-blog-card *,
+#soro-blog .soro-blog-card-title, #soro-blog .soro-blog-card-excerpt,
+#soro-blog .soro-blog-card-date{text-decoration:none !important}
+#soro-blog .soro-blog-content p a, #soro-blog .soro-blog-content li a{text-decoration:underline !important}
 footer{border-top:1px solid var(--line);padding:38px 0 54px;color:var(--peri-dim)}
 footer .wrap{display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
 .foot-links{display:flex;gap:24px;font-weight:600;font-size:.9rem}
