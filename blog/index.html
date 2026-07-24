@@ -43,6 +43,8 @@ nav .wrap{display:flex;align-items:center;gap:20px;height:70px}
   transition:transform .2s}
 .btn:hover{transform:translateY(-2px)}
 header.head{padding:56px 0 8px}
+body.post-view header.head{display:none}
+body.post-view .blogbox{padding-top:26px}
 .eyebrow{font-weight:600;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--blue)}
 h1{font-weight:800;font-size:clamp(2rem,5vw,3.2rem);letter-spacing:-.02em;line-height:1.06;margin-top:10px}
 .lede{color:var(--peri);margin-top:14px;max-width:56ch;font-size:1.05rem}
@@ -82,6 +84,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-con
 </style>
 </head>
 <body>
+<script>if(new URLSearchParams(location.search).has('post'))document.body.className='post-view';</script>
 <nav>
   <div class="wrap">
     <a class="brand" href="/"><img src="/favicon.png" alt="NewsLearner">NewsLearner</a>
