@@ -48,6 +48,29 @@ h1{font-weight:800;font-size:clamp(2rem,5vw,3.2rem);letter-spacing:-.02em;line-h
 .lede{color:var(--peri);margin-top:14px;max-width:56ch;font-size:1.05rem}
 .blogbox{padding:34px 0 90px}
 #soro-blog{min-height:60vh}
+
+/* ── Soro widget'ını marka dünyasına boya (shadow DOM yok, doğrudan stillenebilir) ── */
+#soro-blog, #soro-blog .soro-blog,
+#soro-blog .soro-blog-list, #soro-blog .soro-blog-content{
+  background:transparent !important; font-family:'Jakarta',-apple-system,sans-serif !important}
+#soro-blog .soro-blog-card{
+  background:var(--panel) !important; border:1px solid var(--line) !important;
+  border-radius:18px !important; overflow:hidden !important;
+  box-shadow:0 14px 40px rgba(0,0,0,.35) !important; transition:transform .2s}
+#soro-blog .soro-blog-card:hover{transform:translateY(-3px)}
+#soro-blog .soro-blog-card-image img, #soro-blog .soro-blog-card-image{border-radius:0 !important}
+#soro-blog .soro-blog-card-title, #soro-blog h1, #soro-blog h2, #soro-blog h3{
+  color:var(--cream) !important; font-weight:800 !important; letter-spacing:-.02em}
+#soro-blog .soro-blog-card-excerpt, #soro-blog .soro-blog-card-date{color:var(--peri-dim) !important}
+#soro-blog .soro-blog-content p, #soro-blog .soro-blog-content li{
+  color:#C9D0EA !important; line-height:1.75 !important; font-size:1.04rem}
+#soro-blog .soro-blog-content a{color:var(--blue) !important;text-decoration:underline;text-underline-offset:3px}
+#soro-blog .soro-blog-content img{border-radius:14px !important}
+#soro-blog .soro-blog-back{
+  background:var(--panel) !important; color:var(--cream) !important;
+  border:1px solid var(--line) !important; border-radius:999px !important;
+  padding:9px 18px !important; font-weight:600 !important}
+#soro-blog .soro-blog-header{background:transparent !important}
 footer{border-top:1px solid var(--line);padding:38px 0 54px;color:var(--peri-dim)}
 footer .wrap{display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
 .foot-links{display:flex;gap:24px;font-weight:600;font-size:.9rem}
