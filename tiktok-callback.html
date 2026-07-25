@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TikTok Authorization — NewsLearner</title>
+<meta name="robots" content="noindex">
+<style>
+body{background:#0A0E2A;color:#F3F1E9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;margin:0;padding:24px}
+.box{max-width:520px}
+h1{font-size:1.4rem;letter-spacing:-.02em}
+p{color:#A6AFD8;line-height:1.6}
+code{display:block;margin-top:18px;padding:14px;background:#161E45;border:1px solid #26315f;
+  border-radius:12px;word-break:break-all;font-size:.85rem;color:#F5A623;user-select:all}
+</style>
+</head>
+<body>
+<div class="box">
+  <h1>TikTok authorization complete</h1>
+  <p>Copy the code below and paste it back into the setup script. You can close this tab afterwards.</p>
+  <code id="code">(no code in URL)</code>
+</div>
+<script>
+var p = new URLSearchParams(location.search);
+var c = p.get('code');
+if (c) document.getElementById('code').textContent = c;
+</script>
+</body>
+</html>
