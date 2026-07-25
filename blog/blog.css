@@ -24,6 +24,7 @@ nav .wrap{display:flex;align-items:center;gap:20px;height:70px}
   font-size:.92rem;background:var(--blue-deep);color:#fff;box-shadow:0 6px 22px rgba(58,94,222,.4);
   transition:transform .2s}
 .btn:hover{transform:translateY(-2px)}
+.navlinks a.btn{color:#fff}
 header.head{padding:56px 0 8px}
 .eyebrow{font-weight:600;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:#8AA2F7}
 h1{font-weight:800;font-size:clamp(2rem,5vw,3.2rem);letter-spacing:-.02em;line-height:1.06;margin-top:10px}
