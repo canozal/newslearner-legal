@@ -349,13 +349,13 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-con
         <span class="demo-hint" id="demoHint">Tap a word ↓</span>
       </div>
       <div class="dlangs" role="group" aria-label="Choose a language to preview">
-        <button type="button" class="lchip on" data-l="es" aria-pressed="true"><span aria-hidden="true">🇪🇸</span> Español</button>
-        <button type="button" class="lchip" data-l="de" aria-pressed="false"><span aria-hidden="true">🇩🇪</span> Deutsch</button>
-        <button type="button" class="lchip" data-l="fr" aria-pressed="false"><span aria-hidden="true">🇫🇷</span> Français</button>
-        <button type="button" class="lchip" data-l="it" aria-pressed="false"><span aria-hidden="true">🇮🇹</span> Italiano</button>
-        <button type="button" class="lchip" data-l="pt" aria-pressed="false"><span aria-hidden="true">🇵🇹</span> Português</button>
-        <button type="button" class="lchip" data-l="ru" aria-pressed="false"><span aria-hidden="true">🇷🇺</span> Русский</button>
-        <button type="button" class="lchip" data-l="en" aria-pressed="false"><span aria-hidden="true">🇬🇧</span> English</button>
+        <button type="button" class="lchip on" data-l="es" aria-pressed="true"><span aria-hidden="true">🇪🇸</span> <span lang="es">Español</span></button>
+        <button type="button" class="lchip" data-l="de" aria-pressed="false"><span aria-hidden="true">🇩🇪</span> <span lang="de">Deutsch</span></button>
+        <button type="button" class="lchip" data-l="fr" aria-pressed="false"><span aria-hidden="true">🇫🇷</span> <span lang="fr">Français</span></button>
+        <button type="button" class="lchip" data-l="it" aria-pressed="false"><span aria-hidden="true">🇮🇹</span> <span lang="it">Italiano</span></button>
+        <button type="button" class="lchip" data-l="pt" aria-pressed="false"><span aria-hidden="true">🇵🇹</span> <span lang="pt">Português</span></button>
+        <button type="button" class="lchip" data-l="ru" aria-pressed="false"><span aria-hidden="true">🇷🇺</span> <span lang="ru">Русский</span></button>
+        <button type="button" class="lchip" data-l="en" aria-pressed="false"><span aria-hidden="true">🇬🇧</span> <span lang="en">English</span></button>
       </div>
       <div class="article" id="article" aria-live="polite"></div>
       <div class="dlevels">
@@ -583,6 +583,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-con
   function render(){
     var d=D[cur], txt=d.L[lvl];
     srcEl.textContent=d.s; lvNote.textContent=LVN[lvl];
+    art.setAttribute('lang',cur);
     art.innerHTML='';
     var ttl=document.createElement('span'); ttl.className='hl-title'; ttl.textContent=d.t;
     art.appendChild(ttl);
@@ -606,9 +607,10 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-con
     pend=w;
     document.getElementById('scL1').textContent=d.c;
     document.getElementById('scL2').textContent=d.m;
-    document.getElementById('scWord').textContent=w;
-    document.getElementById('scTr').textContent=e[0];
+    var wEl=document.getElementById('scWord'); wEl.textContent=w; wEl.setAttribute('lang',cur);
+    var tEl=document.getElementById('scTr'); tEl.textContent=e[0]; tEl.setAttribute('lang',d.m.toLowerCase());
     var s=sentenceOf(w);
+    document.getElementById('scCtx').setAttribute('lang',cur);
     document.getElementById('scCtx').innerHTML=esc(s).replace(esc(w),'<b>'+esc(w)+'</b>');
     card.hidden=false;
     document.getElementById('scSave').focus();
