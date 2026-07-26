@@ -100,7 +100,7 @@ def download_covers(articles):
 
 NAV = f"""<nav>
   <div class="wrap">
-    <a class="brand" href="/"><img src="/favicon.png" alt="NewsLearner" width="34" height="34">NewsLearner</a>
+    <a class="brand" href="/"><img src="/favicon.png" alt="" width="34" height="34">NewsLearner</a>
     <div class="navlinks">
       <a href="/#how">How it works</a>
       <a href="/#inside">Inside the app</a>
