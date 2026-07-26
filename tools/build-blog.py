@@ -57,6 +57,9 @@ def get_articles():
         raise SystemExit("SORO_ARTICLES embed script'inde bulunamadı")
     articles = json.loads(m.group(1))
     for a in articles:
+        # slug dosya yolu kurmakta kullanılıyor — dış veriyi doğrulamadan kullanma
+        if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,120}", a.get("slug") or ""):
+            raise SystemExit(f"Geçersiz slug, build durduruldu: {a.get('slug')!r}")
         if not a.get("content"):
             data = json.loads(fetch(f"{API}/api/embed/{TOKEN}/article/{a['id']}"))
             a["content"] = data["content"]
@@ -358,8 +361,18 @@ def cleanup_removed(articles):
         print(f"  kaldırıldı (yayından çekilmiş): blog/{name}/")
 
 
+def existing_post_count():
+    blogdir = os.path.join(ROOT, "blog")
+    return sum(1 for n in os.listdir(blogdir)
+               if os.path.isdir(os.path.join(blogdir, n)) and n != "page")
+
+
 def main():
     articles = get_articles()
+    # Sigorta: API boş/eksik liste döndürürse mevcut siteyi boşaltma
+    if not articles and existing_post_count() > 0:
+        raise SystemExit("API boş liste döndürdü ama sitede yazılar var — "
+                         "muhtemel API arızası, build durduruldu.")
     print(f"{len(articles)} yazı bulundu")
     download_covers(articles)
     cleanup_removed(articles)
