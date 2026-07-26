@@ -60,6 +60,12 @@ def get_articles():
         # slug dosya yolu kurmakta kullanılıyor — dış veriyi doğrulamadan kullanma
         if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,120}", a.get("slug") or ""):
             raise SystemExit(f"Geçersiz slug, build durduruldu: {a.get('slug')!r}")
+        # isoDate HTML niteliklerine ve JSON-LD'ye ham gömülüyor — biçimini garanti et
+        from datetime import datetime as _dt
+        try:
+            _dt.fromisoformat(a["isoDate"])
+        except (KeyError, ValueError, TypeError):
+            raise SystemExit(f"Geçersiz isoDate, build durduruldu: {a.get('isoDate')!r}")
         if not a.get("content"):
             data = json.loads(fetch(f"{API}/api/embed/{TOKEN}/article/{a['id']}"))
             a["content"] = data["content"]
