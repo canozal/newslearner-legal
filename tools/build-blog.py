@@ -146,6 +146,7 @@ def head(title, description, canonical, og_type="website", og_image=f"{SITE}/og-
 <link rel="preload" href="/assets/fonts/jakarta-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/jakarta-800.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/blog/blog.css">
+<link rel="alternate" type="application/rss+xml" title="NewsLearner Blog" href="/blog/feed.xml">
 {extra}"""
 
 
@@ -345,6 +346,37 @@ def build_sitemap(articles, orphans=()):
     open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8").write("\n".join(lines) + "\n")
 
 
+def build_feed(articles):
+    """RSS 2.0 beslemesi — okuyucular, dizinler ve AI tarayıcıları için."""
+    from datetime import datetime
+
+    def rfc822(iso):
+        return datetime.fromisoformat(iso).strftime("%a, %d %b %Y %H:%M:%S %z")
+
+    items = []
+    for a in articles[:20]:
+        items.append(f"""    <item>
+      <title>{esc(a['title'])}</title>
+      <link>{SITE}/blog/{a['slug']}/</link>
+      <guid isPermaLink="true">{SITE}/blog/{a['slug']}/</guid>
+      <pubDate>{rfc822(a['isoDate'])}</pubDate>
+      <description>{esc(a['excerpt'])}</description>
+    </item>""")
+    feed = f"""<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>NewsLearner Blog</title>
+    <link>{SITE}/blog/</link>
+    <atom:link href="{SITE}/blog/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>Guides on learning languages by reading real news.</description>
+    <language>en</language>
+{chr(10).join(items)}
+  </channel>
+</rss>
+"""
+    open(os.path.join(ROOT, "blog", "feed.xml"), "w", encoding="utf-8").write(feed)
+
+
 def report_orphans(articles):
     """Soro listesinde artık olmayan yazıları BİLDİR — asla silme.
 
@@ -382,7 +414,8 @@ def main():
         build_post(a, articles)
         print(f"  blog/{a['slug']}/")
     build_sitemap(articles, orphans)
-    print("sitemap.xml güncellendi")
+    build_feed(articles)
+    print("sitemap.xml + feed.xml güncellendi")
 
 
 if __name__ == "__main__":
