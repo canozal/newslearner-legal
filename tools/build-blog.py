@@ -339,15 +339,23 @@ def build_sitemap(articles):
 
 
 def cleanup_removed(articles):
-    """Soro'da artık yayında olmayan yazıların statik sayfalarını kaldır."""
+    """Soro'da artık yayında olmayan yazıların statik sayfalarını kaldır.
+
+    Sigorta: API bir gün listeyi kısıtlarsa (ör. son N yazı) arşivi yanlışlıkla
+    silmemek için, tek seferde 2'den fazla yazı kaybolmuşsa silme atlanır.
+    """
     import shutil
     keep = {a["slug"] for a in articles} | {"page"}
     blogdir = os.path.join(ROOT, "blog")
-    for name in os.listdir(blogdir):
-        p = os.path.join(blogdir, name)
-        if os.path.isdir(p) and name not in keep:
-            shutil.rmtree(p)
-            print(f"  kaldırıldı (yayından çekilmiş): blog/{name}/")
+    orphans = [n for n in os.listdir(blogdir)
+               if os.path.isdir(os.path.join(blogdir, n)) and n not in keep]
+    if len(orphans) > 2:
+        print(f"  UYARI: {len(orphans)} yazı API listesinde yok — API kısıtlaması"
+              f" olabilir, silme atlandı: {orphans[:5]}...")
+        return
+    for name in orphans:
+        shutil.rmtree(os.path.join(blogdir, name))
+        print(f"  kaldırıldı (yayından çekilmiş): blog/{name}/")
 
 
 def main():
