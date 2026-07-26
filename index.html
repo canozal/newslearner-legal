@@ -97,7 +97,7 @@ nav .wrap{display:flex;align-items:center;gap:20px;height:70px}
 
 /* ---- hero ---- */
 .hero{padding:clamp(56px,9vw,110px) 0 60px;position:relative}
-.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.hero-grid{display:grid;grid-template-columns:1fr 1.08fr;gap:50px;align-items:center}
 @media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:40px}}
 .hero h1{margin:.5rem 0 0}
 .hero .l1{color:var(--cream)} .hero .l2{color:var(--blue)}
@@ -115,15 +115,20 @@ nav .wrap{display:flex;align-items:center;gap:20px;height:70px}
 .microtrust{margin-top:22px;color:var(--peri-dim);font-size:.86rem;font-weight:600}
 
 /* ---- interactive demo card ---- */
-.demo{background:linear-gradient(165deg,#182154,#10163a);border:1px solid var(--line);
-  border-radius:22px;padding:22px;box-shadow:0 30px 80px rgba(0,0,0,.5);position:relative}
+.demo{background:linear-gradient(158deg,#242e58,#111834);border:1px solid rgba(255,255,255,.11);
+  border-radius:30px;padding:15px;position:relative;
+  box-shadow:0 40px 90px rgba(0,0,0,.58),inset 0 1px 0 rgba(255,255,255,.09)}
+.demo::before{content:"";position:absolute;top:6px;left:50%;transform:translateX(-50%);
+  width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.16)}
+.tscreen{position:relative;background:linear-gradient(170deg,#18204a,#0e1433);
+  border:1px solid rgba(255,255,255,.05);border-radius:19px;padding:22px}
 .demo-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .demo-src{display:flex;align-items:center;gap:9px;font-weight:800;font-size:.82rem;color:var(--peri)}
 .demo-src .badge{background:var(--orange);color:#231a05;font-size:.66rem;font-weight:800;padding:3px 8px;border-radius:6px;letter-spacing:.03em}
 .demo-hint{font-size:.78rem;color:var(--blue);font-weight:600;display:flex;align-items:center;gap:6px}
 .article{font-family:Georgia,'Iowan Old Style','Times New Roman',serif;color:#e9ebf7;
-  font-size:1.14rem;line-height:1.62;letter-spacing:.005em}
-.article .hl-title{font-weight:700;font-size:1.32rem;line-height:1.3;display:block;margin-bottom:12px;color:#fff;font-family:Georgia,serif}
+  font-size:1.2rem;line-height:1.64;letter-spacing:.005em}
+.article .hl-title{font-weight:700;font-size:1.42rem;line-height:1.3;display:block;margin-bottom:12px;color:#fff;font-family:Georgia,serif}
 .w{cursor:pointer;border-radius:5px;padding:0 1px;transition:background .18s,color .18s;-webkit-tap-highlight-color:transparent}
 .w.cue{box-shadow:inset 0 -2px 0 rgba(91,123,240,.5)}
 .w:hover{background:rgba(91,123,240,.22)}
@@ -222,6 +227,85 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-con
 .foot-links{display:flex;gap:24px;flex-wrap:wrap;font-weight:600;font-size:.9rem}
 .foot-links a:hover{color:var(--cream)}
 .copy{width:100%;font-size:.82rem;color:var(--peri-dim);margin-top:6px}
+
+/* ---- hero demo: dil + seviye + save card ---- */
+.dlangs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+.lchip{font:inherit;font-weight:600;font-size:.82rem;color:var(--peri);cursor:pointer;
+  background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:999px;
+  padding:6px 11px;display:inline-flex;align-items:center;gap:5px;transition:all .18s}
+.lchip:hover{color:var(--cream);border-color:var(--blue)}
+.lchip{padding:7px 12px}
+.lchip.on{background:var(--blue-deep);border-color:var(--blue-deep);color:#fff}
+.lchip:focus-visible,.lv:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+.dlevels{display:flex;align-items:center;gap:10px;margin-top:16px}
+.lv-lab{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--peri-dim)}
+.lv-grp{display:flex;gap:4px;background:rgba(255,255,255,.05);border:1px solid var(--line);
+  border-radius:999px;padding:3px}
+.lv{font:inherit;font-weight:700;font-size:.78rem;color:var(--peri);cursor:pointer;background:none;
+  border:0;border-radius:999px;padding:5px 13px;transition:all .18s}
+.lv:hover{color:var(--cream)}
+.lv.on{background:var(--blue-deep);color:#fff}
+.lv-note{font-size:.76rem;font-weight:600;color:var(--peri-dim);margin-left:auto}
+.article .w{cursor:pointer;border-radius:4px;padding:1px 2px;margin:-1px -2px;transition:background .15s}
+.article .w:hover{background:rgba(47,98,232,.28)}
+.article .w.cue{background:rgba(91,123,240,.18);box-shadow:inset 0 -2px 0 rgba(91,123,240,.5)}
+.article .w.saved{color:#7ff0c0;background:rgba(16,185,129,.22);font-weight:600}
+/* uygulamadaki Save Word sayfasının birebir minyatürü */
+.savecard{position:absolute;inset:auto 14px 14px;background:#F6F8FC;border-radius:20px;
+  padding:16px;box-shadow:0 16px 32px rgba(11,27,59,.36);z-index:3;
+  font-family:'Jakarta',-apple-system,sans-serif;animation:scIn .22s ease}
+@keyframes scIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.savecard{animation:none}}
+.savecard[hidden]{display:none !important}
+.sc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sc-title{font-weight:700;font-size:1.05rem;color:#0D1526;letter-spacing:-.01em}
+.sc-x{width:30px;height:30px;border-radius:999px;border:0;background:#F2F5FA;color:#94A3B8;
+  font-size:1.2rem;line-height:1;cursor:pointer}
+.sc-x:hover{background:#E3E9F1;color:#64748B}
+.sc-card{background:#fff;border:1px solid #EBEFF6;border-radius:16px;padding:11px 14px}
+.sc-row{display:flex;align-items:center;justify-content:space-between}
+.sc-chip{background:#F2F5FA;border-radius:8px;padding:3px 8px;font-size:.63rem;font-weight:700;
+  letter-spacing:.08em;color:#64748B}
+.sc-spk{width:30px;height:30px;border-radius:999px;background:#2F62E8;display:inline-flex;
+  align-items:center;justify-content:center;font-size:.8rem}
+.sc-word{font-weight:800;font-size:1.28rem;line-height:1.2;letter-spacing:-.02em;color:#0D1526;margin-top:5px}
+.sc-dash{border-bottom:1.5px dashed #EBEFF6;margin:10px 0}
+.sc-tr{font-weight:700;font-size:1.02rem;color:#2F62E8;margin-top:5px}
+.sc-ctxh{font-weight:700;font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;
+  color:#94A3B8;margin:14px 0 6px}
+.sc-ctx{background:#fff;border:1px solid #EBEFF6;border-radius:14px;padding:12px 14px;
+  font-size:.85rem;line-height:1.55;color:#1B2537}
+.sc-ctx b{font-weight:700;color:#2F62E8;background:#EEF3FF;border-radius:4px;padding:1px 3px}
+.sc-save{width:100%;margin-top:11px;background:#2F62E8;color:#fff;border:0;border-radius:14px;
+  padding:12px;font:inherit;font-weight:700;font-size:.92rem;cursor:pointer;
+  box-shadow:0 8px 16px rgba(47,98,232,.24)}
+.sc-save:hover{background:#1E4FD0}
+@media(max-width:560px){.savecard{position:static;margin-top:16px;inset:auto}}
+
+/* ---- tablet ekranı: krem "kâğıt" görünümü ---- */
+.tscreen{background:linear-gradient(172deg,#F7F4EC,#EFECE1);border:1px solid rgba(0,0,0,.06);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7)}
+.tscreen .demo-src{color:#5C6478}
+.tscreen .demo-hint{color:#2F62E8 !important}
+.tscreen .article{color:#232a3d}
+.tscreen .article .hl-title{color:#0D1526}
+.tscreen .article .w.cue{background:rgba(47,98,232,.13);box-shadow:inset 0 -2px 0 rgba(47,98,232,.35)}
+.tscreen .article .w:hover{background:rgba(47,98,232,.22)}
+.tscreen .article .w.saved{color:#047857;background:rgba(16,185,129,.26);font-weight:600}
+.tscreen .lchip{background:rgba(255,255,255,.6);border-color:#DEDACE;color:#5C6478}
+.tscreen .lchip:hover{color:#0D1526;border-color:#2F62E8}
+.tscreen .lchip.on{background:#2F62E8;border-color:#2F62E8;color:#fff}
+.tscreen .lv-lab,.tscreen .lv-note{color:#8A8FA0}
+.tscreen .lv-grp{background:rgba(255,255,255,.55);border-color:#DEDACE}
+.tscreen .lv{color:#5C6478}
+.tscreen .lv:hover{color:#0D1526}
+.tscreen .lv.on{background:#2F62E8;color:#fff}
+.tscreen .demo-foot{border-top-color:#E2DED2}
+.tscreen .counter{color:#232a3d}
+.tscreen .counter .n{color:#047857}
+.tscreen .demo-note{color:#8A8FA0}
+.tscreen .savecard{background:#fff;box-shadow:0 18px 40px rgba(11,27,59,.22)}
+.tscreen .pop{color:#047857}
 </style>
 </head>
 <body>
@@ -259,17 +343,50 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-con
     </div>
 
     <div class="reveal in demo" id="demo" style="transition-delay:.12s">
+      <div class="tscreen">
       <div class="demo-top">
-        <span class="demo-src"><span class="badge">LIVE</span> Today · World</span>
+        <span class="demo-src"><span class="badge">LIVE</span> <span id="demoSrc">Diario Global</span> · World</span>
         <span class="demo-hint" id="demoHint">Tap a word ↓</span>
       </div>
-      <div class="article" id="article">
-        <span class="hl-title" data-t="true">Central banks signal a cautious turn as global markets steady</span>
-        Policymakers across several economies hinted this week that borrowing costs may finally ease, offering a measure of relief to households and businesses that have weathered a punishing stretch of inflation.
+      <div class="dlangs" role="group" aria-label="Choose a language to preview">
+        <button type="button" class="lchip on" data-l="es" aria-pressed="true"><span aria-hidden="true">🇪🇸</span> Español</button>
+        <button type="button" class="lchip" data-l="de" aria-pressed="false"><span aria-hidden="true">🇩🇪</span> Deutsch</button>
+        <button type="button" class="lchip" data-l="fr" aria-pressed="false"><span aria-hidden="true">🇫🇷</span> Français</button>
+        <button type="button" class="lchip" data-l="it" aria-pressed="false"><span aria-hidden="true">🇮🇹</span> Italiano</button>
+        <button type="button" class="lchip" data-l="pt" aria-pressed="false"><span aria-hidden="true">🇵🇹</span> Português</button>
+        <button type="button" class="lchip" data-l="ru" aria-pressed="false"><span aria-hidden="true">🇷🇺</span> Русский</button>
+        <button type="button" class="lchip" data-l="en" aria-pressed="false"><span aria-hidden="true">🇬🇧</span> English</button>
+      </div>
+      <div class="article" id="article" aria-live="polite"></div>
+      <div class="dlevels">
+        <span class="lv-lab">AI level</span>
+        <div class="lv-grp" role="group" aria-label="Choose a CEFR level">
+          <button type="button" class="lv" data-v="A1" aria-pressed="false">A1</button>
+          <button type="button" class="lv on" data-v="B1" aria-pressed="true">B1</button>
+          <button type="button" class="lv" data-v="C1" aria-pressed="false">C1</button>
+        </div>
+        <span class="lv-note" id="lvNote">Intermediate</span>
+      </div>
+      <div class="savecard" id="saveCard" role="dialog" aria-modal="false" aria-label="Save word" hidden>
+        <div class="sc-top">
+          <span class="sc-title">Save Word</span>
+          <button type="button" class="sc-x" id="scClose" aria-label="Close">&times;</button>
+        </div>
+        <div class="sc-card">
+          <div class="sc-row"><span class="sc-chip" id="scL1">ES</span><span class="sc-spk" aria-hidden="true">🔊</span></div>
+          <div class="sc-word" id="scWord"></div>
+          <div class="sc-dash"></div>
+          <div class="sc-row"><span class="sc-chip" id="scL2">EN</span></div>
+          <div class="sc-tr" id="scTr"></div>
+        </div>
+        <div class="sc-ctxh">In context</div>
+        <div class="sc-ctx" id="scCtx"></div>
+        <button type="button" class="sc-save" id="scSave">Save Word</button>
       </div>
       <div class="demo-foot">
         <div class="counter"><span class="tgt">🎯</span><span class="n" id="cnt">0</span>&nbsp;words saved</div>
         <span class="demo-note" id="demoNote">…while you read</span>
+      </div>
       </div>
     </div>
   </div>
@@ -417,39 +534,88 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-con
   },{threshold:.14});
   document.querySelectorAll('.reveal').forEach(function(el){ if(!el.classList.contains('in')) io.observe(el); });
 
-  /* wrap demo article words */
-  var art = document.getElementById('article');
-  var cueWords = {'borrowing':1,'inflation':1,'policymakers':1,'economies':1,'relief':1,'cautious':1,'steady':1,'households':1};
-  function wrapWords(node){
-    var out=[];
-    node.childNodes.forEach(function(n){
-      if(n.nodeType===3){
-        n.textContent.split(/(\s+)/).forEach(function(tok){
-          if(/^\s+$/.test(tok)||tok===''){ out.push(document.createTextNode(tok)); return; }
-          var core=tok.replace(/^[^A-Za-zÀ-ÿ]+|[^A-Za-zÀ-ÿ]+$/g,'');
-          var span=document.createElement('span'); span.className='w'; span.textContent=tok;
-          if(cueWords[core.toLowerCase()]) span.classList.add('cue');
-          out.push(span);
-        });
-      } else { out.push(n); }
-    });
-    node.innerHTML=''; out.forEach(function(x){node.appendChild(x);});
-  }
-  art.querySelectorAll('[data-t], .article').forEach(function(){});
-  // wrap title span and the trailing text node
-  var title = art.querySelector('.hl-title');
-  wrapWords(title);
-  // wrap the paragraph text (everything after title)
-  var frag=document.createElement('span');
-  var n=title.nextSibling;
-  while(n){ var nx=n.nextSibling; frag.appendChild(n); n=nx; }
-  wrapWords(frag); art.appendChild(frag);
-
-  var cnt=document.getElementById('cnt'), saved=0;
+  /* ---- hero demo: 7 dil x 3 seviye + save card ---- */
+  var D={
+   es:{c:'ES',m:'EN',s:'Diario Global',t:'Nueva línea de alta velocidad entre el puerto y el aeropuerto',
+    L:{A1:'La [ciudad] abrió una nueva línea de tren. El [viaje] dura una hora.',
+       B1:'La [ciudad] ha inaugurado una línea de alta velocidad que [conecta] el puerto con el aeropuerto. Según las autoridades, el [trayecto] dura ahora menos de una hora.',
+       C1:'La reciente [inauguración] del enlace ferroviario de alta velocidad ha reducido el [trayecto] a menos de una hora, un [hito] que las autoridades consideran decisivo para la economía regional.'},
+    W:{'ciudad':['city','NOUN · FEM'],'viaje':['trip, journey','NOUN · MASC'],'conecta':['connects','VERB · PRESENT'],'trayecto':['journey, route','NOUN · MASC'],'inauguración':['opening','NOUN · FEM'],'hito':['milestone','NOUN · MASC']}},
+   de:{c:'DE',m:'EN',s:'Weltbote',t:'Neue Schnellzugstrecke zwischen Hafen und Flughafen',
+    L:{A1:'Die [Stadt] hat eine neue Zuglinie eröffnet. Die [Fahrt] dauert jetzt eine Stunde.',
+       B1:'Die [Stadt] hat eine neue Schnellzugstrecke eröffnet, die den Hafen mit dem Flughafen [verbindet]. Nach Angaben der Behörden dauert die [Fahrt] jetzt weniger als eine Stunde.',
+       C1:'Die kürzlich eingeweihte Schnellzugverbindung zwischen Hafen und Flughafen verkürzt die Fahrzeit auf unter eine Stunde – ein [Meilenstein], den die Behörden als entscheidend für die regionale Wirtschaft [bezeichnen].'},
+    W:{'Stadt':['city, town','NOUN · FEM'],'Fahrt':['ride, trip','NOUN · FEM'],'verbindet':['connects','VERB · PRESENT'],'Meilenstein':['milestone','NOUN · MASC'],'bezeichnen':['describe, call','VERB · PRESENT']}},
+   fr:{c:'FR',m:'EN',s:'Le Globe',t:'Nouvelle ligne à grande vitesse entre le port et l’aéroport',
+    L:{A1:'La [ville] a ouvert une nouvelle ligne de train. Le [trajet] dure une heure.',
+       B1:'La [ville] a inauguré une ligne à grande vitesse qui [relie] le port à l’aéroport. Selon les autorités, le [trajet] dure désormais moins d’une heure.',
+       C1:'L’[inauguration] récente de la liaison à grande vitesse a ramené le [trajet] à moins d’une heure, une [étape] que les autorités jugent déterminante pour l’économie régionale.'},
+    W:{'ville':['city, town','NOUN · FEM'],'trajet':['journey, trip','NOUN · MASC'],'relie':['links, connects','VERB · PRESENT'],'inauguration':['opening','NOUN · FEM'],'étape':['step, milestone','NOUN · FEM']}},
+   it:{c:'IT',m:'EN',s:'Corriere Globale',t:'Nuova linea ad alta velocità tra porto e aeroporto',
+    L:{A1:'La [città] ha aperto una nuova linea ferroviaria. Il [viaggio] dura un’ora.',
+       B1:'La [città] ha inaugurato una linea ad alta velocità che [collega] il porto all’aeroporto. Secondo le autorità, il [viaggio] dura ora meno di un’ora.',
+       C1:'La recente inaugurazione del collegamento ad alta velocità ha ridotto il [viaggio] a meno di un’ora, un [traguardo] che le autorità considerano decisivo per l’economia regionale.'},
+    W:{'città':['city, town','NOUN · FEM'],'viaggio':['trip, journey','NOUN · MASC'],'collega':['links, connects','VERB · PRESENT'],'traguardo':['milestone, goal','NOUN · MASC']}},
+   pt:{c:'PT',m:'EN',s:'Jornal Global',t:'Nova linha de alta velocidade entre porto e aeroporto',
+    L:{A1:'A [cidade] abriu uma nova linha de comboio. A [viagem] dura uma hora.',
+       B1:'A [cidade] inaugurou uma linha de alta velocidade que [liga] o porto ao aeroporto. Segundo as autoridades, a [viagem] dura agora menos de uma hora.',
+       C1:'A recente inauguração da ligação de alta velocidade reduziu a [viagem] para menos de uma hora, um [marco] que as autoridades consideram decisivo para a economia regional.'},
+    W:{'cidade':['city, town','NOUN · FEM'],'viagem':['trip, journey','NOUN · FEM'],'liga':['links, connects','VERB · PRESENT'],'marco':['milestone','NOUN · MASC']}},
+   ru:{c:'RU',m:'EN',s:'Мировые вести',t:'Новая скоростная линия между портом и аэропортом',
+    L:{A1:'[Город] открыл новую линию поезда. [Поездка] длится один час.',
+       B1:'[Город] открыл новую скоростную линию, которая [соединяет] порт с аэропортом. По словам властей, [поездка] теперь занимает меньше часа.',
+       C1:'Недавно открытое скоростное сообщение между портом и аэропортом сократило время в пути до менее чем часа — [рубеж], который власти называют решающим для экономики региона.'},
+    W:{'Город':['city, town','NOUN · MASC'],'Поездка':['trip, journey','NOUN · FEM'],'поездка':['trip, journey','NOUN · FEM'],'соединяет':['connects','VERB · PRESENT'],'рубеж':['milestone','NOUN · MASC']}},
+   en:{c:'EN',m:'ES',s:'World Desk',t:'New high-speed rail link between port and airport',
+    L:{A1:'The [city] opened a new train line. The [trip] takes one hour.',
+       B1:'The [city] has opened a high-speed line that [connects] the port to the airport. Officials say the [journey] now takes less than an hour.',
+       C1:'The newly [inaugurated] high-speed link has cut the [journey] to under an hour, a [milestone] officials call decisive for the regional economy.'},
+    W:{'city':['ciudad','NOUN'],'trip':['viaje','NOUN'],'connects':['conecta','VERB · PRESENT'],'journey':['trayecto','NOUN'],'inaugurated':['inaugurado','ADJ · PAST PART.'],'milestone':['hito','NOUN']}}
+  };
+  var LVN={A1:'Beginner',B1:'Intermediate',C1:'Advanced'};
+  var art=document.getElementById('article'), cnt=document.getElementById('cnt');
   var hint=document.getElementById('demoHint'), note=document.getElementById('demoNote');
-  var demo=document.getElementById('demo');
+  var demo=document.getElementById('demo'), srcEl=document.getElementById('demoSrc');
+  var card=document.getElementById('saveCard'), lvNote=document.getElementById('lvNote');
+  var cur='es', lvl='B1', saved={}, count=0, pend=null;
+
+  function esc(s){var d=document.createElement('span');d.textContent=s;return d.innerHTML;}
+  function render(){
+    var d=D[cur], txt=d.L[lvl];
+    srcEl.textContent=d.s; lvNote.textContent=LVN[lvl];
+    art.innerHTML='';
+    var ttl=document.createElement('span'); ttl.className='hl-title'; ttl.textContent=d.t;
+    art.appendChild(ttl);
+    txt.split(/(\[[^\]]+\])/).forEach(function(tok){
+      if(tok.charAt(0)==='['){
+        var w=tok.slice(1,-1), sp=document.createElement('span');
+        sp.className='w cue'+(saved[cur+':'+w]?' saved':''); sp.textContent=w; sp.dataset.w=w;
+        sp.setAttribute('role','button'); sp.setAttribute('tabindex','0');
+        art.appendChild(sp);
+      } else if(tok){ art.appendChild(document.createTextNode(tok)); }
+    });
+  }
+  function sentenceOf(w){
+    var txt=D[cur].L[lvl].replace(/[\[\]]/g,'');
+    var parts=txt.split(/(?<=[.!?—])\s+/);
+    for(var i=0;i<parts.length;i++){ if(parts[i].indexOf(w)>-1) return parts[i]; }
+    return txt;
+  }
+  function openCard(w){
+    var d=D[cur], e=d.W[w]; if(!e) return;
+    pend=w;
+    document.getElementById('scL1').textContent=d.c;
+    document.getElementById('scL2').textContent=d.m;
+    document.getElementById('scWord').textContent=w;
+    document.getElementById('scTr').textContent=e[0];
+    var s=sentenceOf(w);
+    document.getElementById('scCtx').innerHTML=esc(s).replace(esc(w),'<b>'+esc(w)+'</b>');
+    card.hidden=false;
+    document.getElementById('scSave').focus();
+  }
+  function closeCard(){ card.hidden=true; pend=null; }
   function pop(el){
-    if(reduce) return;
+    if(reduce||!el) return;
     var r=el.getBoundingClientRect(), dr=demo.getBoundingClientRect();
     var p=document.createElement('span'); p.className='pop'; p.textContent='+1';
     p.style.left=(r.left-dr.left+r.width/2-6)+'px'; p.style.top=(r.top-dr.top-6)+'px';
@@ -457,13 +623,39 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-con
     setTimeout(function(){p.remove();},1000);
   }
   art.addEventListener('click',function(e){
-    var t=e.target;
-    if(!t.classList.contains('w')||t.classList.contains('saved')) return;
-    t.classList.add('saved'); t.classList.remove('cue'); saved++;
-    cnt.textContent=saved; pop(t);
-    if(saved===1){ hint.textContent='Nice — keep going'; note.textContent='saved with its sentence'; }
-    if(saved>=4){ hint.textContent='That’s the whole idea →'; note.textContent='now they’re yours to review'; }
+    var t=e.target; if(!t.classList||!t.classList.contains('w')) return; openCard(t.dataset.w);
   });
+  art.addEventListener('keydown',function(e){
+    var t=e.target; if(!t.classList||!t.classList.contains('w')) return;
+    if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openCard(t.dataset.w); }
+  });
+  document.getElementById('scClose').addEventListener('click',closeCard);
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!card.hidden) closeCard(); });
+  document.getElementById('scSave').addEventListener('click',function(){
+    if(!pend) return;
+    var key=cur+':'+pend;
+    if(!saved[key]){ saved[key]=1; count++; cnt.textContent=count; }
+    var el=art.querySelector('.w[data-w="'+pend+'"]');
+    if(el){ el.classList.add('saved'); el.classList.remove('cue'); pop(el); }
+    closeCard();
+    if(count===1){ hint.textContent='Nice — keep going'; note.textContent='saved with its sentence'; }
+    if(count>=3){ hint.textContent='That’s the whole idea →'; note.textContent='yours to review later'; }
+  });
+  document.querySelectorAll('.lchip').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.lchip').forEach(function(x){x.classList.remove('on');x.setAttribute('aria-pressed','false');});
+      b.classList.add('on'); b.setAttribute('aria-pressed','true');
+      cur=b.dataset.l; closeCard(); render();
+    });
+  });
+  document.querySelectorAll('.lv').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.lv').forEach(function(x){x.classList.remove('on');x.setAttribute('aria-pressed','false');});
+      b.classList.add('on'); b.setAttribute('aria-pressed','true');
+      lvl=b.dataset.v; closeCard(); render();
+    });
+  });
+  render();
 
   /* ambient knowledge dust */
   var c=document.getElementById('dust'), x=c.getContext('2d'), W,H,parts=[];
