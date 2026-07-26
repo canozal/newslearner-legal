@@ -91,22 +91,62 @@ def cover_path(a):
     return f"blog/{a['slug']}/cover.webp"
 
 
+MAX_COVER_BYTES = 10 * 1024 * 1024  # kapak indirme tavanı
+
+
+def fetch_capped(url, cap):
+    req = urllib.request.Request(url, headers={"User-Agent": "newslearner-blog-build/1.0"})
+    with urllib.request.urlopen(req, timeout=30, context=_CTX) as r:
+        data = r.read(cap + 1)
+    if len(data) > cap:
+        raise ValueError(f"dosya {cap} bayt tavanını aşıyor")
+    return data
+
+
+def valid_image(data):
+    """Baytlar gerçekten çözülebilir bir raster görsel mi? (PIL, dev-piksel
+    bombalarına karşı kendi limitini de uygular)"""
+    import io
+    from PIL import Image
+    try:
+        with Image.open(io.BytesIO(data)) as im:
+            im.verify()
+        with Image.open(io.BytesIO(data)) as im:
+            if im.format not in {"WEBP", "PNG", "JPEG", "GIF"}:
+                return None
+            return im.size
+    except Exception:
+        return None
+
+
 def download_covers(articles):
     for a in articles:
-        if not a.get("image"):
-            a["cover"] = None
-            continue
+        a["cover"] = None
+        a["cover_w"] = a["cover_h"] = None
+        url = a.get("image")
         dest = os.path.join(ROOT, cover_path(a))
-        os.makedirs(os.path.dirname(dest), exist_ok=True)
         if not os.path.exists(dest):
-            open(dest, "wb").write(fetch(a["image"]))
+            # yeni indirme: https zorunlu + boyut tavanı + görsel doğrulaması
+            if not (url and url.startswith("https://")):
+                if url:
+                    print(f"  UYARI: https olmayan kapak atlandı: blog/{a['slug']}")
+                continue
+            try:
+                data = fetch_capped(url, MAX_COVER_BYTES)
+            except Exception as e:
+                print(f"  UYARI: kapak indirilemedi ({e}): blog/{a['slug']}")
+                continue
+            if not valid_image(data):
+                print(f"  UYARI: kapak geçerli bir görsel değil, atlandı: blog/{a['slug']}")
+                continue
+            os.makedirs(os.path.dirname(dest), exist_ok=True)
+            open(dest, "wb").write(data)
+        size = valid_image(open(dest, "rb").read())
+        if not size:
+            print(f"  UYARI: diskteki kapak geçersiz, sayfadan çıkarıldı: blog/{a['slug']}")
+            continue
         a["cover"] = "/" + cover_path(a)
-        try:
-            from PIL import Image
-            with Image.open(dest) as im:
-                a["cover_w"], a["cover_h"] = im.size
-        except Exception:
-            a["cover_w"] = a["cover_h"] = None
+        a["cover_w"], a["cover_h"] = size
 
 
 NAV = f"""<nav>
