@@ -153,7 +153,8 @@ def card(a):
     img = ""
     if a["cover"]:
         dims = f' width="{a["cover_w"]}" height="{a["cover_h"]}"' if a.get("cover_w") else ""
-        img = f'<img src="{a["cover"]}" alt="{esc(a["title"])}"{dims} loading="lazy">'
+        # kart linkinin içinde başlık zaten var — alt boş kalmalı (çift okuma olmasın)
+        img = f'<img src="{a["cover"]}" alt=""{dims} loading="lazy">'
     return f"""    <a class="card" href="/blog/{a['slug']}/">
       {img}
       <div class="card-body">
