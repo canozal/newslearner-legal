@@ -16,6 +16,8 @@ import sys
 import urllib.request
 from datetime import date
 
+import nh3  # içerik temizleyici — güvenlik kontrolü, opsiyonel değil
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = "https://newslearner.com"
 TOKEN = "a4b15ddd-bcef-4fae-88b7-d9ce5ebb8a2b"
@@ -69,6 +71,9 @@ def get_articles():
         if not a.get("content"):
             data = json.loads(fetch(f"{API}/api/embed/{TOKEN}/article/{a['id']}"))
             a["content"] = data["content"]
+        # Gövde HTML'i sayfaya ham gömülüyor — XSS'e karşı beyaz listeden geçir
+        # (script/on* /javascript: temizlenir; p, h2, strong, a, img vb. korunur)
+        a["content"] = nh3.clean(a["content"] or "")
     articles.sort(key=lambda a: a["isoDate"], reverse=True)
     return articles
 
