@@ -73,7 +73,17 @@ def get_articles():
             a["content"] = data["content"]
         # Gövde HTML'i sayfaya ham gömülüyor — XSS'e karşı beyaz listeden geçir
         # (script/on* /javascript: temizlenir; p, h2, strong, a, img vb. korunur)
-        a["content"] = nh3.clean(a["content"] or "")
+        ham = a["content"] or ""
+        a["content"] = nh3.clean(ham)
+        # Sessiz bütünlük kaybını görünür yap: temizlik bir etiket türünü tamamen
+        # sökerse (örn. Soro yeni bir embed türü gönderirse) log'a uyarı düş
+        from collections import Counter
+        once = Counter(re.findall(r"<(\w+)[\s>]", ham))
+        sonra = Counter(re.findall(r"<(\w+)[\s>]", a["content"]))
+        sokulen = {t: n for t, n in (once - sonra).items()}
+        if sokulen:
+            print(f"  UYARI: temizlik blog/{a['slug']} içinden etiket söktü: {sokulen}"
+                  f" — kasıtlıysa sorun yok, meşru içerikse nh3 beyaz listesi genişletilmeli")
     articles.sort(key=lambda a: a["isoDate"], reverse=True)
     return articles
 
