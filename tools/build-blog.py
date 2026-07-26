@@ -161,8 +161,25 @@ def card(a):
     </a>"""
 
 
+PER_PAGE = 24  # bu eşiğe kadar tek sayfa; aşılınca /blog/page/2/ ... otomatik açılır
+
+
 def build_index(articles):
+    import shutil
+    pages = [articles[i:i + PER_PAGE] for i in range(0, len(articles), PER_PAGE)] or [[]]
+    # eski sayfalama dizinlerini temizle (yazı sayısı azalırsa artık sayfa kalmasın)
+    pagedir = os.path.join(ROOT, "blog", "page")
+    if os.path.isdir(pagedir):
+        shutil.rmtree(pagedir)
+    for n, chunk in enumerate(pages, 1):
+        build_index_page(n, chunk, len(pages))
+
+
+def build_index_page(n, articles, total):
     cards = "\n".join(card(a) for a in articles)
+    canonical = f"{SITE}/blog/" if n == 1 else f"{SITE}/blog/page/{n}/"
+    title = ("Blog — NewsLearner | Language Learning with Real News" if n == 1
+             else f"Blog — Page {n} — NewsLearner")
     items = ",\n    ".join(
         f'{{"@type":"ListItem","position":{i+1},"url":"{SITE}/blog/{a["slug"]}/"}}'
         for i, a in enumerate(articles)
@@ -173,22 +190,34 @@ def build_index(articles):
   "@type": "Blog",
   "name": "NewsLearner Blog",
   "description": "Guides on learning languages by reading real news.",
-  "url": "{SITE}/blog/",
+  "url": "{canonical}",
   "publisher": {{"@type": "Organization", "name": "NewsLearner", "url": "{SITE}/", "logo": "{SITE}/apple-touch-icon.png"}},
   "blogPost": [
     {items}
   ]
 }}
 </script>"""
+    pager = ""
+    if total > 1:
+        newer = "" if n == 1 else f'<a class="pager-link" href="{"/blog/" if n == 2 else f"/blog/page/{n-1}/"}">&larr; Newer posts</a>'
+        older = "" if n == total else f'<a class="pager-link" href="/blog/page/{n+1}/">Older posts &rarr;</a>'
+        pager = f"""    <nav class="pager" aria-label="Blog pages">
+      {newer}
+      <span class="pager-info">Page {n} of {total}</span>
+      {older}
+    </nav>"""
+    redirect = ("""<script>(function(){var p=new URLSearchParams(location.search).get('post');"""
+                """if(p&&/^[a-z0-9-]+$/.test(p))location.replace('/blog/'+p+'/');})();</script>"""
+                if n == 1 else "")
     page = f"""<!doctype html>
 <html lang="en">
 <head>
-{head("Blog — NewsLearner | Language Learning with Real News",
+{head(title,
       "Guides and ideas on learning languages by reading real news: methods, CEFR levels, vocabulary science, and language-specific tips from the NewsLearner team.",
-      f"{SITE}/blog/", extra=ld)}
+      canonical, extra=ld)}
 </head>
 <body>
-<script>(function(){{var p=new URLSearchParams(location.search).get('post');if(p&&/^[a-z0-9-]+$/.test(p))location.replace('/blog/'+p+'/');}})();</script>
+{redirect}
 {NAV}
 <header class="head">
   <div class="wrap">
@@ -198,15 +227,21 @@ def build_index(articles):
   </div>
 </header>
 <main class="blogbox">
-  <div class="wrap cards">
+  <div class="wrap">
+    <div class="cards">
 {cards}
+    </div>
+{pager}
   </div>
 </main>
 {FOOTER}
 </body>
 </html>
 """
-    open(os.path.join(ROOT, "blog", "index.html"), "w", encoding="utf-8").write(page)
+    out = (os.path.join(ROOT, "blog", "index.html") if n == 1
+           else os.path.join(ROOT, "blog", "page", str(n), "index.html"))
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    open(out, "w", encoding="utf-8").write(page)
 
 
 def build_post(a, articles):
@@ -303,10 +338,23 @@ def build_sitemap(articles):
     open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8").write("\n".join(lines) + "\n")
 
 
+def cleanup_removed(articles):
+    """Soro'da artık yayında olmayan yazıların statik sayfalarını kaldır."""
+    import shutil
+    keep = {a["slug"] for a in articles} | {"page"}
+    blogdir = os.path.join(ROOT, "blog")
+    for name in os.listdir(blogdir):
+        p = os.path.join(blogdir, name)
+        if os.path.isdir(p) and name not in keep:
+            shutil.rmtree(p)
+            print(f"  kaldırıldı (yayından çekilmiş): blog/{name}/")
+
+
 def main():
     articles = get_articles()
     print(f"{len(articles)} yazı bulundu")
     download_covers(articles)
+    cleanup_removed(articles)
     build_index(articles)
     for a in articles:
         build_post(a, articles)
