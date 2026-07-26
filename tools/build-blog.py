@@ -328,7 +328,7 @@ def build_post(a, articles):
     open(out, "w", encoding="utf-8").write(page)
 
 
-def build_sitemap(articles):
+def build_sitemap(articles, orphans=()):
     newest = articles[0]["isoDate"][:10] if articles else date.today().isoformat()
     lines = ['<?xml version="1.0" encoding="UTF-8"?>',
              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
@@ -337,28 +337,28 @@ def build_sitemap(articles):
         lines.append(f"  <url><loc>{SITE}{path}</loc><lastmod>{lm}</lastmod></url>")
     for a in articles:
         lines.append(f"  <url><loc>{SITE}/blog/{a['slug']}/</loc><lastmod>{a['isoDate'][:10]}</lastmod></url>")
+    # Soro listesinden düşmüş ama sitede tutulan yazılar da sitemap'te kalsın
+    for slug in orphans:
+        lines.append(f"  <url><loc>{SITE}/blog/{slug}/</loc></url>")
     lines.append("</urlset>")
     open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8").write("\n".join(lines) + "\n")
 
 
-def cleanup_removed(articles):
-    """Soro'da artık yayında olmayan yazıların statik sayfalarını kaldır.
+def report_orphans(articles):
+    """Soro listesinde artık olmayan yazıları BİLDİR — asla silme.
 
-    Sigorta: API bir gün listeyi kısıtlarsa (ör. son N yazı) arşivi yanlışlıkla
-    silmemek için, tek seferde 2'den fazla yazı kaybolmuşsa silme atlanır.
+    Otomatik silme bilinçli olarak kapalı: yayınlanmış her yazı kalıcı bir
+    varlıktır. Bir yazıyı gerçekten kaldırmak isterseniz blog/<yazı>/ dizinini
+    elle silin; sitemap bir sonraki senkronda kendiliğinden güncellenir.
     """
-    import shutil
     keep = {a["slug"] for a in articles} | {"page"}
     blogdir = os.path.join(ROOT, "blog")
     orphans = [n for n in os.listdir(blogdir)
                if os.path.isdir(os.path.join(blogdir, n)) and n not in keep]
-    if len(orphans) > 2:
-        print(f"  UYARI: {len(orphans)} yazı API listesinde yok — API kısıtlaması"
-              f" olabilir, silme atlandı: {orphans[:5]}...")
-        return
     for name in orphans:
-        shutil.rmtree(os.path.join(blogdir, name))
-        print(f"  kaldırıldı (yayından çekilmiş): blog/{name}/")
+        print(f"  NOT: blog/{name}/ Soro listesinde yok — sitede tutuluyor"
+              f" (otomatik silme kapalı)")
+    return orphans
 
 
 def existing_post_count():
@@ -375,12 +375,12 @@ def main():
                          "muhtemel API arızası, build durduruldu.")
     print(f"{len(articles)} yazı bulundu")
     download_covers(articles)
-    cleanup_removed(articles)
+    orphans = report_orphans(articles)
     build_index(articles)
     for a in articles:
         build_post(a, articles)
         print(f"  blog/{a['slug']}/")
-    build_sitemap(articles)
+    build_sitemap(articles, orphans)
     print("sitemap.xml güncellendi")
 
 
