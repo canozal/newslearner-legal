@@ -131,6 +131,7 @@ def head(title, description, canonical, og_type="website", og_image=f"{SITE}/og-
 <meta name="description" content="{esc(description)}">
 <link rel="canonical" href="{canonical}">
 <meta name="theme-color" content="#0A0E2A">
+<meta name="apple-itunes-app" content="app-id=6757966210">
 <meta property="og:site_name" content="NewsLearner">
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(description)}">
