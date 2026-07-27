@@ -280,7 +280,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-con
   padding:12px;font:inherit;font-weight:700;font-size:.92rem;cursor:pointer;
   box-shadow:0 8px 16px rgba(47,98,232,.24)}
 .sc-save:hover{background:#1E4FD0}
-@media(max-width:560px){.savecard{position:static;margin-top:16px;inset:auto}}
+
 
 /* ---- tablet ekranı: krem "kâğıt" görünümü ---- */
 .tscreen{background:linear-gradient(172deg,#F7F4EC,#EFECE1);border:1px solid rgba(0,0,0,.06);
@@ -327,7 +327,10 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-con
   .lv{font-size:.74rem;padding:5px 11px}
   .lv-note{font-size:.72rem}
   .demo-foot{margin-top:13px}
-  .savecard{inset:auto 10px 10px}
+  .savecard{position:absolute;inset:10px;margin-top:0;overflow-y:auto}
+  .sc-ctx{font-size:.78rem;padding:10px 12px}
+  .sc-ctxh{margin:10px 0 5px}
+  .sc-save{margin-top:12px;padding:11px}
   .sc-word{font-size:1.18rem}
   .sc-tr{font-size:.96rem}
 }
