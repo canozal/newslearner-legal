@@ -326,7 +326,10 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-con
   .lv-lab{font-size:.64rem}
   .lv{font-size:.74rem;padding:5px 11px}
   .lv-note{font-size:.72rem}
-  .demo-foot{margin-top:13px}
+  .demo-foot{margin-top:13px;gap:8px}
+  .counter{font-size:.86rem;white-space:nowrap}
+  .counter .n{font-size:1.02rem}
+  .demo-note{display:none}
   /* başlık satırı mobilde tek satırda kalsın */
   .demo-top{gap:8px;margin-bottom:11px;flex-wrap:nowrap}
   .demo-src{gap:7px;font-size:.74rem;min-width:0;flex:1 1 auto;
@@ -419,7 +422,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-con
         <button type="button" class="sc-save" id="scSave">Save Word</button>
       </div>
       <div class="demo-foot">
-        <div class="counter"><span class="tgt">🎯</span><span class="n" id="cnt">0</span>&nbsp;words saved</div>
+        <div class="counter"><span class="tgt">🎯</span><span class="n" id="cnt">0</span>&nbsp;<span id="cntLbl">words saved</span></div>
         <span class="demo-note" id="demoNote">…while you read</span>
       </div>
       </div>
@@ -671,7 +674,9 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-con
   document.getElementById('scSave').addEventListener('click',function(){
     if(!pend) return;
     var key=cur+':'+pend;
-    if(!saved[key]){ saved[key]=1; count++; cnt.textContent=count; }
+    if(!saved[key]){ saved[key]=1; count++; cnt.textContent=count;
+      var lbl=document.getElementById('cntLbl');
+      if(lbl) lbl.textContent = count===1 ? 'word saved' : 'words saved'; }
     var el=art.querySelector('.w[data-w="'+pend+'"]');
     if(el){ el.classList.add('saved'); el.classList.remove('cue'); pop(el); }
     closeCard();
