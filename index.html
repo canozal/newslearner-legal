@@ -327,6 +327,13 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-con
   .lv{font-size:.74rem;padding:5px 11px}
   .lv-note{font-size:.72rem}
   .demo-foot{margin-top:13px}
+  /* başlık satırı mobilde tek satırda kalsın */
+  .demo-top{gap:8px;margin-bottom:11px;flex-wrap:nowrap}
+  .demo-src{gap:7px;font-size:.74rem;min-width:0;flex:1 1 auto;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .demo-src .badge{flex:0 0 auto}
+  .demo-cat{display:none}
+  .demo-hint{flex:0 0 auto;font-size:.72rem;white-space:nowrap}
   .savecard{position:absolute;inset:10px;margin-top:0;overflow-y:auto}
   .sc-ctx{font-size:.78rem;padding:10px 12px}
   .sc-ctxh{margin:10px 0 5px}
@@ -373,7 +380,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-con
     <div class="reveal in demo" id="demo" style="transition-delay:.12s">
       <div class="tscreen">
       <div class="demo-top">
-        <span class="demo-src"><span class="badge">LIVE</span> <span id="demoSrc">Diario Global</span> · World</span>
+        <span class="demo-src"><span class="badge">LIVE</span> <span id="demoSrc">Diario Global</span><span class="demo-cat"> · World</span></span>
         <span class="demo-hint" id="demoHint">Tap a word ↓</span>
       </div>
       <div class="dlangs" role="group" aria-label="Choose a language to preview">
