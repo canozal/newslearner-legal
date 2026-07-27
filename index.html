@@ -697,7 +697,20 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-con
       lvl=b.dataset.v; closeCard(); render();
     });
   });
-  render();
+  /* tüm dil/seviye kombinasyonlarını ölçüp en uzununa göre sabit yükseklik ver:
+     dil veya seviye değişince kart oynamaz, her ekran genişliğinde doğru hesaplanır */
+  function fitHeight(){
+    var eskiCur=cur, eskiLvl=lvl, mx=0;
+    art.style.minHeight='0px';
+    for(var d in D){ for(var l in D[d].L){
+      cur=d; lvl=l; render();
+      var hh=art.getBoundingClientRect().height; if(hh>mx) mx=hh;
+    }}
+    cur=eskiCur; lvl=eskiLvl; render();
+    art.style.minHeight=Math.ceil(mx)+'px';
+  }
+  fitHeight();
+  var fitT; addEventListener('resize',function(){ clearTimeout(fitT); fitT=setTimeout(fitHeight,180); });
 
   /* ambient knowledge dust */
   var c=document.getElementById('dust'), x=c.getContext('2d'), W,H,parts=[];
