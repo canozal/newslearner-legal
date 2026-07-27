@@ -251,8 +251,9 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-con
 .article .w.cue{background:rgba(91,123,240,.18);box-shadow:inset 0 -2px 0 rgba(91,123,240,.5)}
 .article .w.saved{color:#7ff0c0;background:rgba(16,185,129,.22);text-shadow:0 0 .4px currentColor}
 /* uygulamadaki Save Word sayfasının birebir minyatürü */
-.savecard{position:absolute;inset:auto 14px 14px;background:#F6F8FC;border-radius:20px;
-  padding:16px;box-shadow:0 16px 32px rgba(11,27,59,.36);z-index:3;
+.savecard{position:absolute;inset:14px;background:#F6F8FC;border-radius:20px;
+  padding:16px;box-shadow:0 16px 32px rgba(11,27,59,.36);z-index:3;overflow-y:auto;
+  display:flex;flex-direction:column;
   font-family:'Jakarta',-apple-system,sans-serif;animation:scIn .22s ease}
 @keyframes scIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.savecard{animation:none}}
@@ -276,7 +277,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-con
 .sc-ctx{background:#fff;border:1px solid #EBEFF6;border-radius:14px;padding:12px 14px;
   font-size:.85rem;line-height:1.55;color:#1B2537}
 .sc-ctx b{font-weight:700;color:#2F62E8;background:#EEF3FF;border-radius:4px;padding:1px 3px}
-.sc-save{width:100%;margin-top:11px;background:#2F62E8;color:#fff;border:0;border-radius:14px;
+.sc-save{width:100%;margin-top:auto;background:#2F62E8;color:#fff;border:0;border-radius:14px;
   padding:12px;font:inherit;font-weight:700;font-size:.92rem;cursor:pointer;
   box-shadow:0 8px 16px rgba(47,98,232,.24)}
 .sc-save:hover{background:#1E4FD0}
