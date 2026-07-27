@@ -357,7 +357,8 @@ def build_post(a, articles):
     if a["cover"]:
         dims = f' width="{a["cover_w"]}" height="{a["cover_h"]}"' if a.get("cover_w") else ""
         cover = f'<img class="cover" src="{a["cover"]}" alt="{esc(a["title"])}"{dims} fetchpriority="high">'
-    meta_extra = (f'<meta property="article:published_time" content="{a["isoDate"]}">\n' + ld)
+    meta_extra = (f'<meta property="article:published_time" content="{a["isoDate"]}">\n'
+                  f'<meta property="article:modified_time" content="{a["isoDate"]}">\n' + ld)
     page = f"""<!doctype html>
 <html lang="en">
 <head>
