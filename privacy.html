@@ -204,13 +204,41 @@
                 relevant ads.</li>
             <li><strong>OpenAI:</strong> Processes text for translation/simplification but does not store your content
                 training data.</li>
+            <li><strong>TikTok (Login Kit &amp; Content Posting API):</strong> Used only to publish
+                our own videos to our own TikTok channel — see Section 6 for details.</li>
         </ul>
 
-        <h2>6. Children's Privacy</h2>
+        <h2>6. TikTok Integration</h2>
+        <p>NewsLearner operates an official TikTok channel and uses TikTok's Login Kit and Content
+            Posting API to publish NewsLearner's own educational videos to NewsLearner's own TikTok
+            account. This integration is used exclusively by our team for our brand account — it does
+            not involve app users or their accounts in any way.</p>
+        <h3>a. What data we access from TikTok</h3>
+        <ul>
+            <li><strong>Basic account info (user.info.basic):</strong> the display name, avatar and
+                open ID of <em>our own brand account</em>, used solely to confirm the correct account
+                is connected.</li>
+            <li><strong>Video publishing (video.publish):</strong> permission to upload and publish
+                videos that we produce to our own account.</li>
+        </ul>
+        <h3>b. What we store and for how long</h3>
+        <ul>
+            <li>OAuth access and refresh tokens for our own account, stored securely on our
+                infrastructure and used only to authenticate publishing requests.</li>
+            <li>We do <strong>not</strong> access, collect, or store any data about other TikTok
+                users, followers, viewers, or app users through this integration.</li>
+            <li>Tokens are deleted when the integration is disconnected. You can also revoke access
+                at any time from the TikTok app's security settings.</li>
+        </ul>
+        <h3>c. Data sharing</h3>
+        <p>Data obtained from TikTok is never sold, shared with third parties, or used for
+            advertising. It is used only to operate our own channel.</p>
+
+        <h2>7. Children's Privacy</h2>
         <p>We do not knowingly collect personal information from children. In fact, we do not collect personal
             information from <em>anyone</em>.</p>
 
-        <h2>7. Contact</h2>
+        <h2>8. Contact</h2>
         <p>For support, please contact us:</p>
         <p><strong>Email:</strong> <a href="mailto:support@newslearner.com">support@newslearner.com</a></p>
 
