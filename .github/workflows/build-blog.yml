@@ -23,6 +23,7 @@ jobs:
       - run: pip install pillow certifi nh3
       - run: python tools/build-blog.py
       - name: Commit if changed
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -31,4 +32,22 @@ jobs:
             git commit -m "blog: sync articles from Soro"
             git pull --rebase origin main
             git push
+            echo "changed=1" >> "$GITHUB_OUTPUT"
           fi
+      # Yeni/degisen icerik varsa arama motorlarina haber ver (Bing/DDG/Yandex/Naver).
+      # IndexNow anahtari public'tir (tasarim geregi kokte yayinda) — sir degildir.
+      - name: Ping IndexNow
+        if: steps.commit.outputs.changed == '1'
+        run: |
+          sleep 90  # GitHub Pages deploy'unun yayilmasini bekle
+          python - <<'PYEOF'
+          import json, re, urllib.request
+          xml = open("sitemap.xml").read()
+          urls = re.findall(r"<loc>([^<]+)</loc>", xml)
+          key = "5f4730a9d19d1c026544a8735c5d7bf2"
+          body = json.dumps({"host": "newslearner.com", "key": key,
+            "keyLocation": f"https://newslearner.com/{key}.txt", "urlList": urls}).encode()
+          req = urllib.request.Request("https://api.indexnow.org/indexnow", data=body,
+            headers={"Content-Type": "application/json; charset=utf-8"})
+          print("IndexNow HTTP", urllib.request.urlopen(req).status, "-", len(urls), "URL bildirildi")
+          PYEOF
