@@ -1,22 +1,17 @@
 User-agent: *
 Allow: /
 
-# -----------------------------------------------------------------------------
-# 404: SKILL NOT FOUND
-# -----------------------------------------------------------------------------
-# Dear Script Kiddie,
+# ─── WORD OF THE DAY ─────────────────────────────────────────
 #
-# I see you scanning my ports.
-# I see you looking for wp-admin.
+#   crawler  /ˈkrɔː.lər/  noun
+#   A program that reads the internet so people don't have to.
 #
-# Bad news: This is a static site.
-# Good news: You can still learn something.
+#   "A crawler arrived at 03:14 UTC and left without
+#    learning a single new word."
 #
-# Try harder next time. Or just go drink some tea.
-# -----------------------------------------------------------------------------
-Disallow: /wp-admin
-Disallow: /admin
-Disallow: /login
-Disallow: /secret-base
+#   Tap it. Save it. Review it tomorrow.
+#   That's the whole app, really.  →  newslearner.com
+#
+# ─────────────────────────────────────────────────────────────
 
 Sitemap: https://newslearner.com/sitemap.xml
