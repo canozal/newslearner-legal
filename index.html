@@ -359,7 +359,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-con
       <a href="#inside">Inside the app</a>
       <a href="#faq">FAQ</a>
       <a href="/blog/">Blog</a>
-      <a class="btn btn-primary" href="https://apps.apple.com/us/app/newslearner-learn-languages/id6757966210" target="_blank" rel="noopener">Get the app</a>
+      <a class="btn btn-primary" href="#get">Get the app</a>
     </div>
   </div>
 </nav>
@@ -538,7 +538,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-con
   </div>
 </section>
 
-<section class="final">
+<section class="final" id="get">
   <div class="wrap reveal">
     <h2>Start with today's headlines.</h2>
     <p class="lede">The news is going to happen anyway. You might as well learn a language while you read it.</p>
@@ -578,6 +578,28 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-con
     es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
   },{threshold:.14});
   document.querySelectorAll('.reveal').forEach(function(el){ if(!el.classList.contains('in')) io.observe(el); });
+  /* Emniyet ağı: /#get gibi doğrudan bir bölüme atlanarak gelindiğinde
+     gözlemci tetiklenmeyebiliyor (tarayıcının hash'e atlaması yükleme
+     olayından sonra olabiliyor) ve bölüm görünmez kalıyordu. Üç kapı:
+     hash hedefini anında aç, ilk kaydırmada görünenleri aç, yüklemede tekrar. */
+  function revealVisible(){
+    document.querySelectorAll('.reveal').forEach(function(el){
+      var r = el.getBoundingClientRect();
+      if(r.top < (window.innerHeight||0) && r.bottom > 0) el.classList.add('in');
+    });
+  }
+  function revealHashTarget(){
+    if(!location.hash) return;
+    var target;
+    try { target = document.querySelector(location.hash); } catch(e){ return; }
+    if(!target) return;
+    if(target.classList.contains('reveal')) target.classList.add('in');
+    target.querySelectorAll('.reveal').forEach(function(x){ x.classList.add('in'); });
+  }
+  revealHashTarget();
+  window.addEventListener('hashchange', revealHashTarget);
+  window.addEventListener('load', function(){ revealHashTarget(); revealVisible(); });
+  window.addEventListener('scroll', revealVisible, { passive: true, once: false });
 
   /* ---- hero demo: 7 dil x 3 seviye + save card ---- */
   var D={

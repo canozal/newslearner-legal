@@ -168,8 +168,7 @@ NAV = f"""<nav>
       <a href="/#inside">Inside the app</a>
       <a href="/#faq">FAQ</a>
       <a href="/blog/" style="color:var(--cream)">Blog</a>
-      <a class="btn" href="{APP_URL}" target="_blank" rel="noopener">iPhone</a>
-      <a class="btn" href="{PLAY_URL}" target="_blank" rel="noopener">Android</a>
+      <a class="btn" href="/#get">Get the app</a>
     </div>
   </div>
 </nav>"""
