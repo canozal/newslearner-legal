@@ -23,6 +23,7 @@ SITE = "https://newslearner.com"
 TOKEN = "a4b15ddd-bcef-4fae-88b7-d9ce5ebb8a2b"
 API = "https://app.trysoro.com"
 APP_URL = "https://apps.apple.com/us/app/newslearner-learn-languages/id6757966210"
+PLAY_URL = "https://play.google.com/store/apps/details?id=com.learn.languages.newslearner"
 
 # Sitemap'teki statik sayfalar: (path, lastmod). Blog sayfaları otomatik eklenir.
 STATIC_PAGES = [
@@ -167,7 +168,8 @@ NAV = f"""<nav>
       <a href="/#inside">Inside the app</a>
       <a href="/#faq">FAQ</a>
       <a href="/blog/" style="color:var(--cream)">Blog</a>
-      <a class="btn" href="{APP_URL}" target="_blank" rel="noopener">Get the app</a>
+      <a class="btn" href="{APP_URL}" target="_blank" rel="noopener">iPhone</a>
+      <a class="btn" href="{PLAY_URL}" target="_blank" rel="noopener">Android</a>
     </div>
   </div>
 </nav>"""
@@ -378,8 +380,9 @@ def build_post(a, articles):
     </div>
     <aside class="cta">
       <h2>Put it into practice</h2>
-      <p>NewsLearner turns today's real headlines into reading practice at your level — tap any word to save it, then review until it sticks. Free on iOS, in seven languages.</p>
-      <a class="btn" href="{APP_URL}" target="_blank" rel="noopener">Get NewsLearner for iOS</a>
+      <p>NewsLearner turns today's real headlines into reading practice at your level — tap any word to save it, then review until it sticks. Free on iPhone and Android, in seven languages.</p>
+      <a class="btn" href="{APP_URL}" target="_blank" rel="noopener">Get it for iPhone</a>
+      <a class="btn" href="{PLAY_URL}" target="_blank" rel="noopener">Get it on Google Play</a>
     </aside>
   </article>
 </main>
