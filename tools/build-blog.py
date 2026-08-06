@@ -348,7 +348,9 @@ def build_index_page(n, articles, total):
 
 
 def build_post(a, articles):
-    title = f"{a['title']} — NewsLearner Blog"
+    # Kisa marka eki: "Blog" kelimesi eklenince 4 yazinin title'i 65 karakteri
+    # asip SERP'te kirpiliyordu
+    title = f"{a['title']} — NewsLearner"
     canonical = f"{SITE}/blog/{a['slug']}/"
     og_image = f"{SITE}{a.get('cover_og') or a['cover']}" if a["cover"] else f"{SITE}/og-image.png"
     mins = reading_minutes(a["content"])
