@@ -99,6 +99,11 @@ def get_articles():
         if sokulen:
             print(f"  UYARI: temizlik blog/{a['slug']} içinden etiket söktü: {sokulen}"
                   f" — kasıtlıysa sorun yok, meşru içerikse nh3 beyaz listesi genişletilmeli")
+        # nh3 her linke rel="noopener noreferrer" ekler; site içi linklerde
+        # anlamsız (dış linklerdeki güvenlik amacı burada geçerli değil) — sök
+        a["content"] = re.sub(
+            r'(<a href="(?:/|https://newslearner\.com)[^"]*") rel="noopener noreferrer"',
+            r"\1", a["content"])
     articles.sort(key=lambda a: a["isoDate"], reverse=True)
     return articles
 
@@ -172,6 +177,19 @@ def download_covers(articles):
             continue
         a["cover"] = "/" + cover_path(a)
         a["cover_w"], a["cover_h"] = size
+        # og:image için JPEG kopya — bazı sosyal scraper'lar (LinkedIn vb.)
+        # WebP önizlemeyi işlemiyor; sayfa içinde WebP kalır
+        jpg = dest[: -len(".webp")] + ".jpg"
+        if not os.path.exists(jpg):
+            import io
+            from PIL import Image
+            try:
+                with Image.open(dest) as im:
+                    im.convert("RGB").save(jpg, "JPEG", quality=85)
+            except Exception as e:
+                print(f"  UYARI: og-jpeg üretilemedi ({e}): blog/{a['slug']}")
+        if os.path.exists(jpg):
+            a["cover_og"] = a["cover"][: -len(".webp")] + ".jpg"
 
 
 NAV = f"""<nav>
@@ -262,9 +280,12 @@ def build_index_page(n, articles, total):
     canonical = f"{SITE}/blog/" if n == 1 else f"{SITE}/blog/page/{n}/"
     title = ("Blog — NewsLearner | Language Learning with Real News" if n == 1
              else f"Blog — Page {n} — NewsLearner")
+    # blogPost alanı BlogPosting bekler (ListItem yalnızca ItemList'e ait —
+    # Google eskisini sessizce yok sayıyordu)
     items = ",\n    ".join(
-        f'{{"@type":"ListItem","position":{i+1},"url":"{SITE}/blog/{a["slug"]}/"}}'
-        for i, a in enumerate(articles)
+        f'{{"@type":"BlogPosting","headline":{json.dumps(a["title"])},'
+        f'"url":"{SITE}/blog/{a["slug"]}/","datePublished":"{a["isoDate"]}"}}'
+        for a in articles
     )
     ld = f"""<script type="application/ld+json">
 {{
@@ -329,7 +350,7 @@ def build_index_page(n, articles, total):
 def build_post(a, articles):
     title = f"{a['title']} — NewsLearner Blog"
     canonical = f"{SITE}/blog/{a['slug']}/"
-    og_image = f"{SITE}{a['cover']}" if a["cover"] else f"{SITE}/og-image.png"
+    og_image = f"{SITE}{a.get('cover_og') or a['cover']}" if a["cover"] else f"{SITE}/og-image.png"
     mins = reading_minutes(a["content"])
     ld = f"""<script type="application/ld+json">
 {{
