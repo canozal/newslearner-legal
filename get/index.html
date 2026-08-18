@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Akıllı mağaza yönlendirmesi: reklam/paylaşım linki olarak
+         newslearner.com/get kullanılır. iOS → App Store, Android → Play,
+         masaüstü → ana sayfadaki indirme bölümü. Arama motorlarına kapalı
+         (yönlendirme sayfası, içerik değil). -->
+    <meta name="robots" content="noindex, nofollow">
+    <title>Get NewsLearner</title>
+    <style>
+        body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+               background: #0f172a; color: #f8fafc; font-family: 'Inter', -apple-system, sans-serif; text-align: center; }
+        a { color: #60a5fa; }
+        .box { padding: 24px; }
+        .spin { width: 28px; height: 28px; border: 3px solid rgba(255,255,255,0.2); border-top-color: #3b82f6;
+                border-radius: 50%; margin: 0 auto 16px; animation: r 0.8s linear infinite; }
+        @keyframes r { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div class="spin"></div>
+        <p>Taking you to the store…</p>
+        <noscript>
+            <p><a href="https://apps.apple.com/app/id6757966210">App Store (iPhone/iPad)</a></p>
+            <p><a href="https://play.google.com/store/apps/details?id=com.learn.languages.newslearner">Google Play (Android)</a></p>
+        </noscript>
+    </div>
+    <script>
+        (function () {
+            var APP_STORE = "https://apps.apple.com/app/id6757966210";
+            var PLAY_BASE = "https://play.google.com/store/apps/details?id=com.learn.languages.newslearner";
+
+            var ua = navigator.userAgent || "";
+            // iPadOS 13+ kendini Mac gibi tanıtır — dokunmatik Mac = iPad.
+            var isIOS = /iPhone|iPad|iPod/i.test(ua) ||
+                        (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1);
+            var isAndroid = /Android/i.test(ua);
+
+            // Kampanya takibi: /get?c=fb-post gibi bir etiket verilirse Play'e
+            // Install Referrer olarak taşınır (Console'da kaynak kırılımı görünür).
+            var params = new URLSearchParams(location.search);
+            var campaign = params.get("c") || "website_get";
+            var PLAY_STORE = PLAY_BASE + "&referrer=" +
+                encodeURIComponent("utm_source=" + campaign + "&utm_medium=smartlink");
+
+            if (isIOS) {
+                location.replace(APP_STORE);
+            } else if (isAndroid) {
+                location.replace(PLAY_STORE);
+            } else {
+                // Masaüstü: ana sayfadaki indirme bölümü (iki mağaza rozeti)
+                location.replace("/#get");
+            }
+        })();
+    </script>
+</body>
+</html>
