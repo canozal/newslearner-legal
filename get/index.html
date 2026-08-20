@@ -112,11 +112,12 @@
                         document.body.appendChild(f);
                     } catch (e) { /* şema denemesi başarısızsa sorun değil */ }
                 }
+                // "go" KARAR ANINDA gönderilir, yönlendirmenin hemen öncesinde
+                // değil: gömülü tarayıcı sayfayı kapatırken sendBeacon'ı
+                // düşürebiliyor ve ölçüm gerçekte olandan kötü görünüyor.
+                beacon("smartlink_go", { target: webUrl });
                 // Her durumda ve koşulsuz: https mağaza adresi.
-                setTimeout(function () {
-                    beacon("smartlink_go", { target: webUrl });
-                    location.replace(webUrl);
-                }, inAppBrowser ? 400 : 0);
+                setTimeout(function () { location.replace(webUrl); }, inAppBrowser ? 400 : 0);
             };
 
             if (isIOS) {
