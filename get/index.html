@@ -81,15 +81,23 @@
             // simülatörde yakalandı). Riski sadece gereken yere sınırlıyoruz.
             var inAppBrowser = /FBAN|FBAV|FB_IAB|FBIOS|Instagram|Line|Twitter/i.test(ua);
 
+            // 20 Ağu 2026 — GERİ ALINDI: native şema gömülü tarayıcıda asılı
+            // kalmaya sebep oluyordu. 3 saatte 91 tıklama → 0 kurulum ölçüldü
+            // (önceki gün https ile 84 tıklama → ~4 kurulum). Şema denemesi
+            // iframe ile yapılıyor: sayfayı ASLA terk etmiyor, https yönlendirmesi
+            // her koşulda çalışıyor. İptal mantığı yok — mağaza açıldıysa arkada
+            // yönlendirme yapılmış olması zararsız.
             var openStore = function (nativeUrl, webUrl) {
-                if (!inAppBrowser) { location.replace(webUrl); return; }
-                var t = setTimeout(function () { location.replace(webUrl); }, 700);
-                // Sayfa gizlenirse mağaza uygulaması açılmış demektir → yedeği iptal et
-                document.addEventListener("visibilitychange", function () {
-                    if (document.hidden) clearTimeout(t);
-                });
-                window.addEventListener("pagehide", function () { clearTimeout(t); });
-                location.href = nativeUrl;
+                if (inAppBrowser && nativeUrl) {
+                    try {
+                        var f = document.createElement("iframe");
+                        f.style.display = "none";
+                        f.src = nativeUrl;
+                        document.body.appendChild(f);
+                    } catch (e) { /* şema denemesi başarısızsa sorun değil */ }
+                }
+                // Her durumda ve koşulsuz: https mağaza adresi.
+                setTimeout(function () { location.replace(webUrl); }, inAppBrowser ? 400 : 0);
             };
 
             if (isIOS) {
