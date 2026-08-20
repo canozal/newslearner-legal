@@ -37,22 +37,38 @@
 
             // Ölçüm: kaç kişi bu sayfaya geldi? (kurulumlarla aynı panelde görünsün)
             // sendBeacon engellemez — yönlendirme hiç gecikmez. Hata olursa sessiz geç.
-            try {
-                var params0 = new URLSearchParams(location.search);
-                var payload = JSON.stringify({
-                    api_key: "phc_qsgAaRgbh3vr9CWWEvLTQBDDPxSKDmWw3Msdpcfmauge",
-                    event: "smartlink_hit",
-                    distinct_id: "web-" + Math.random().toString(36).slice(2),
-                    properties: {
-                        campaign: params0.get("c") || "direct",
-                        platform: /iPhone|iPad|iPod/i.test(ua) ? "ios"
-                                : /Android/i.test(ua) ? "android" : "desktop",
-                        in_app_browser: /FBAN|FBAV|FB_IAB|Instagram/i.test(ua),
-                        $current_url: location.href
-                    }
-                });
-                navigator.sendBeacon("https://us.i.posthog.com/i/v0/e/", payload);
-            } catch (e) { /* ölçüm asla akışı bozmasın */ }
+            // Aynı ziyaretçiyi üç aşamada da takip edebilmek için tek kimlik:
+            //   hit  = sayfa açıldı
+            //   go   = yönlendirme çağrıldı (hedef adresle)
+            //   left = tarayıcı sayfadan GERÇEKTEN ayrıldı (mağazaya gitti)
+            // hit≈go ama left≈0 ise yönlendirme engelleniyor demektir (bizim sorunumuz);
+            // üçü de eşitse sorun mağaza sayfasının dönüştürmemesindedir.
+            var visitorId = "web-" + Math.random().toString(36).slice(2);
+            var params0 = new URLSearchParams(location.search);
+            var baseProps = {
+                campaign: params0.get("c") || "direct",
+                platform: /iPhone|iPad|iPod/i.test(ua) ? "ios"
+                        : /Android/i.test(ua) ? "android" : "desktop",
+                in_app_browser: /FBAN|FBAV|FB_IAB|FBIOS|Instagram/i.test(ua)
+            };
+            var beacon = function (name, extra) {
+                try {
+                    var props = { $current_url: location.href };
+                    for (var k in baseProps) props[k] = baseProps[k];
+                    for (var k2 in (extra || {})) props[k2] = extra[k2];
+                    navigator.sendBeacon("https://us.i.posthog.com/i/v0/e/", JSON.stringify({
+                        api_key: "phc_qsgAaRgbh3vr9CWWEvLTQBDDPxSKDmWw3Msdpcfmauge",
+                        event: name, distinct_id: visitorId, properties: props
+                    }));
+                } catch (e) { /* ölçüm asla akışı bozmasın */ }
+            };
+
+            beacon("smartlink_hit");
+            // Sayfadan ayrılma = mağazaya gidiş kanıtı (sendBeacon bu iş için tasarlandı)
+            window.addEventListener("pagehide", function () { beacon("smartlink_left"); });
+            document.addEventListener("visibilitychange", function () {
+                if (document.hidden) beacon("smartlink_left");
+            });
             // iPadOS 13+ kendini Mac gibi tanıtır — dokunmatik Mac = iPad.
             var isIOS = /iPhone|iPad|iPod/i.test(ua) ||
                         (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1);
@@ -97,7 +113,10 @@
                     } catch (e) { /* şema denemesi başarısızsa sorun değil */ }
                 }
                 // Her durumda ve koşulsuz: https mağaza adresi.
-                setTimeout(function () { location.replace(webUrl); }, inAppBrowser ? 400 : 0);
+                setTimeout(function () {
+                    beacon("smartlink_go", { target: webUrl });
+                    location.replace(webUrl);
+                }, inAppBrowser ? 400 : 0);
             };
 
             if (isIOS) {
