@@ -73,7 +73,16 @@
             // indiriyor (84 reklam tıklaması → ~4 kurulum).
             // Çözüm: önce native şema (itms-apps:// / market://) denenir; şema
             // desteklenmiyorsa 700 ms sonra https adresine düşülür.
+            // Native şema YALNIZCA uygulama-içi tarayıcıda kullanılır. Sebep:
+            // normal Safari/Chrome zaten https mağaza linkini native uygulamayla
+            // açıyor (Universal Link), oysa mağaza uygulaması bulunmayan bir
+            // cihazda itms-apps:// "adres geçersiz" hata diyaloğu bastırıyor ve
+            // o diyalog yedek yönlendirmeyi de bloke ediyor (20 Ağu 2026,
+            // simülatörde yakalandı). Riski sadece gereken yere sınırlıyoruz.
+            var inAppBrowser = /FBAN|FBAV|FB_IAB|FBIOS|Instagram|Line|Twitter/i.test(ua);
+
             var openStore = function (nativeUrl, webUrl) {
+                if (!inAppBrowser) { location.replace(webUrl); return; }
                 var t = setTimeout(function () { location.replace(webUrl); }, 700);
                 // Sayfa gizlenirse mağaza uygulaması açılmış demektir → yedeği iptal et
                 document.addEventListener("visibilitychange", function () {
