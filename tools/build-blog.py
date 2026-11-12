@@ -41,7 +41,7 @@ CSS_VER = _css_version()
 
 # Sitemap'teki statik sayfalar: (path, lastmod). Blog sayfaları otomatik eklenir.
 STATIC_PAGES = [
-    ("/", "2026-07-26"),
+    ("/", None),  # ana sayfa "From the blog" bölümünü taşıyor -> en yeni yazıyla güncellenir
     ("/blog/", None),  # None -> en yeni yazının tarihi
     ("/privacy.html", "2026-03-12"),
     ("/terms.html", "2026-03-12"),
@@ -261,11 +261,115 @@ def card(a):
     </a>"""
 
 
+# ---------------------------------------------------------------------------
+# İç linkleme. Google "Keşfedildi – dizine eklenmemiş" durumunda URL'yi bilir
+# ama taramaya değer bulmaz; en güçlü sinyallerden biri sayfaya site içinden
+# kaç link geldiğidir. Eskiden her yazının altında yalnızca EN YENİ 3 yazı
+# vardı: yazıların yarısından fazlasına başka hiçbir yazıdan link gelmiyordu.
+# Artık her yazı: (1) konuca en yakın yazılara, (2) bir önceki/sonraki yazıya
+# link verir; /blog/ tüm yazıları listeler; ana sayfa en yenileri gösterir.
+# ---------------------------------------------------------------------------
+RELATED_COUNT = 3      # yazı altındaki "Keep reading" kartı sayısı
+RELATED_MAX_IN = 6     # tek bir yazının bu yoldan alabileceği en çok link
+HOME_POSTS = 6         # ana sayfadaki "From the blog" yazı sayısı
+
+_STOP = set("""a an and are as at be but by can do does for from how in into is it its of on or
+that the their this to what when where which while who why with without you your versus vs
+that's actually really real news newslearner language languages learner learners learn
+learning app apps read reading guide""".split())
+
+
+def _tokens(a):
+    text = f"{a['title']} {a['slug'].replace('-', ' ')} {a.get('excerpt') or ''}".lower()
+    out = set()
+    for w in re.findall(r"[a-z]+", text):
+        if len(w) > 3 and w.endswith("s") and not w.endswith("ss"):
+            w = w[:-1]  # kaba tekilleştirme: "levels" ~ "level"
+        if len(w) > 2 and w not in _STOP:
+            out.add(w)
+    return out
+
+
+def assign_related(articles):
+    """Her yazıya a['related'] (konuca yakın yazılar) ve a['newer']/a['older']
+    (kronolojik komşular) ata. Deterministik: aynı girdi -> aynı çıktı, yani
+    yeni yazı gelmedikçe sayfalar boşuna değişmez."""
+    import math
+    from collections import Counter
+    toks = {a["slug"]: _tokens(a) for a in articles}
+    df = Counter(t for ts in toks.values() for t in ts)
+    n = len(articles)
+    idf = {t: math.log(n / c) for t, c in df.items()}
+    incoming = Counter()
+    for i, a in enumerate(articles):  # articles: yeniden eskiye sıralı
+        a["newer"] = articles[i - 1] if i > 0 else None
+        a["older"] = articles[i + 1] if i + 1 < n else None
+    # eskiden yeniye işle: eski yazıların seçimi yeni yazı gelince oynamasın
+    for a in reversed(articles):
+        mine = toks[a["slug"]]
+        scored = sorted(
+            ((sum(idf[t] for t in mine & toks[o["slug"]]), o["isoDate"], o)
+             for o in articles if o is not a),
+            key=lambda x: (-x[0], x[1]))
+        picked = [o for _, _, o in scored if incoming[o["slug"]] < RELATED_MAX_IN][:RELATED_COUNT]
+        if len(picked) < RELATED_COUNT:  # tavan yüzünden eksik kaldıysa tamamla
+            picked += [o for _, _, o in scored if o not in picked][:RELATED_COUNT - len(picked)]
+        for o in picked:
+            incoming[o["slug"]] += 1
+        a["related"] = picked
+
+
+def all_posts_block(articles):
+    """Tüm yazıların düz link listesi — /blog/ sayfalarının altında. Sayfalama
+    derinliğinden bağımsız olarak her yazıyı ana sayfadan 2 tık uzağa getirir."""
+    items = "\n".join(
+        f'      <li><a href="/blog/{a["slug"]}/">{esc(a["title"])}</a></li>' for a in articles)
+    return f"""    <section class="allposts" aria-labelledby="allposts-title">
+      <h2 class="more-title" id="allposts-title">All articles</h2>
+      <ul>
+{items}
+      </ul>
+    </section>"""
+
+
+HOME_START = "<!-- blog:start (tools/build-blog.py tarafından üretilir — elle düzenlemeyin) -->"
+HOME_END = "<!-- blog:end -->"
+
+
+def build_home(articles):
+    """Ana sayfadaki "From the blog" bölümünü en yeni yazılarla doldur. Ana
+    sayfa sitenin en güçlü sayfası; yeni yazıya oradan link, Google'ın onu
+    taramasını hızlandıran en doğrudan sinyal."""
+    path = os.path.join(ROOT, "index.html")
+    page = open(path, encoding="utf-8").read()
+    if HOME_START not in page or HOME_END not in page:
+        print("  UYARI: index.html içinde blog işaretleri yok — ana sayfa güncellenmedi")
+        return
+    cards = "\n".join(
+        f"""      <a class="bpost" href="/blog/{a['slug']}/">
+        <time datetime="{a['isoDate'][:10]}">{esc(a['date'])}</time>
+        <h3>{esc(a['title'])}</h3>
+        <p>{esc(a['excerpt'])}</p>
+      </a>""" for a in articles[:HOME_POSTS])
+    block = f"""{HOME_START}
+    <div class="bposts reveal">
+{cards}
+    </div>
+    {HOME_END}"""
+    before, rest = page.split(HOME_START, 1)
+    after = rest.split(HOME_END, 1)[1]
+    new = before + block + after
+    if new != page:
+        open(path, "w", encoding="utf-8").write(new)
+
+
 PER_PAGE = 24  # bu eşiğe kadar tek sayfa; aşılınca /blog/page/2/ ... otomatik açılır
 
 
 def build_index(articles):
     import shutil
+    global ALL_POSTS
+    ALL_POSTS = all_posts_block(articles)
     pages = [articles[i:i + PER_PAGE] for i in range(0, len(articles), PER_PAGE)] or [[]]
     # eski sayfalama dizinlerini temizle (yazı sayısı azalırsa artık sayfa kalmasın)
     pagedir = os.path.join(ROOT, "blog", "page")
@@ -335,6 +439,7 @@ def build_index_page(n, articles, total):
 {cards}
     </div>
 {pager}
+{ALL_POSTS}
   </div>
 </main>
 {FOOTER}
@@ -379,18 +484,31 @@ def build_post(a, articles):
   ]
 }}
 </script>"""
-    others = [o for o in articles if o["slug"] != a["slug"]][:3]
+    others = a.get("related") or []
     more = ""
     if others:
         more_cards = "\n".join(card(o) for o in others)
         more = f"""<section class="more">
   <div class="wrap">
-    <h2 class="more-title">More from the blog</h2>
+    <h2 class="more-title">Keep reading</h2>
     <div class="cards">
 {more_cards}
     </div>
+    <p class="more-all"><a href="/blog/">Browse all articles &rarr;</a></p>
   </div>
 </section>"""
+    # kronolojik önceki/sonraki: zincir sayesinde hiçbir yazı linksiz kalmaz
+    step = ""
+    if a.get("older") or a.get("newer"):
+        o, nw = a.get("older"), a.get("newer")
+        prev_l = (f'<a class="step-link" rel="prev" href="/blog/{o["slug"]}/">'
+                  f'<span>&larr; Previous</span>{esc(o["title"])}</a>') if o else "<span></span>"
+        next_l = (f'<a class="step-link step-next" rel="next" href="/blog/{nw["slug"]}/">'
+                  f'<span>Next &rarr;</span>{esc(nw["title"])}</a>') if nw else "<span></span>"
+        step = f"""    <nav class="stepnav" aria-label="More articles">
+      {prev_l}
+      {next_l}
+    </nav>"""
     cover = ""
     if a["cover"]:
         dims = f' width="{a["cover_w"]}" height="{a["cover_h"]}"' if a.get("cover_w") else ""
@@ -428,6 +546,7 @@ def build_post(a, articles):
         </a>
       </div>
     </aside>
+{step}
   </article>
 </main>
 {more}
@@ -519,12 +638,14 @@ def main():
     print(f"{len(articles)} yazı bulundu")
     download_covers(articles)
     orphans = report_orphans(articles)
+    assign_related(articles)
     build_index(articles)
     for a in articles:
         build_post(a, articles)
         print(f"  blog/{a['slug']}/")
     build_sitemap(articles, orphans)
     build_feed(articles)
+    build_home(articles)
     print("sitemap.xml + feed.xml güncellendi")
 
 

@@ -212,6 +212,18 @@ section{position:relative;padding:clamp(64px,9vw,120px) 0}
 .faq summary:focus-visible{outline:2px solid var(--orange);outline-offset:4px;border-radius:4px}
 .faq p{color:var(--peri);font-size:1rem;margin:0 0 20px;max-width:62ch;line-height:1.6}
 
+/* ---- from the blog ---- */
+.bposts{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+@media(max-width:900px){.bposts{grid-template-columns:1fr}}
+.bpost{display:block;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:26px 24px;transition:transform .2s,border-color .2s}
+.bpost:hover{transform:translateY(-3px);border-color:var(--blue)}
+.bpost:focus-visible{outline:2px solid var(--orange);outline-offset:3px}
+.bpost time{display:block;color:var(--peri-dim);font-size:.8rem;font-weight:600;letter-spacing:.04em}
+.bpost h3{font-size:1.16rem;line-height:1.3;letter-spacing:-.02em;margin:10px 0 8px}
+.bpost p{color:var(--peri);font-size:.94rem}
+.blog-all{color:#8AA2F7;font-weight:600;white-space:nowrap}
+.blog-all:hover{color:var(--cream)}
+
 /* ---- final cta ---- */
 .final{text-align:center}
 .final .wrap{max-width:760px}
@@ -535,6 +547,50 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-con
       <details class="faq"><summary>Do I need an account?</summary><p>No. There's no sign-up, no email and no password. Your saved words and progress stay on your device.</p></details>
       <details class="faq"><summary>Is it available on Android?</summary><p>Yes — NewsLearner is on Google Play now, and on the App Store for iPhone. Both versions have the same features.</p></details>
     </div>
+  </div>
+</section>
+
+<section id="blog">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">From the blog</span>
+      <h2>Guides for reading your way to fluency.</h2>
+      <p>Methods, CEFR levels and the science of making vocabulary stick. <a class="blog-all" href="/blog/">Browse all articles →</a></p>
+    </div>
+    <!-- blog:start (tools/build-blog.py tarafından üretilir — elle düzenlemeyin) -->
+    <div class="bposts reveal">
+      <a class="bpost" href="/blog/best-news-apps-for-learners/">
+        <time datetime="2026-11-10">November 10, 2026</time>
+        <h3>7 Best News Apps for Learners Building Fluency</h3>
+        <p>Find the best news apps for learners who want real reading practice, useful vocabulary, and a daily habit built around stories that matter without drills.</p>
+      </a>
+      <a class="bpost" href="/blog/language-data-privacy/">
+        <time datetime="2026-11-08">November 8, 2026</time>
+        <h3>Language Data Privacy for Serious Learners</h3>
+        <p>Language data privacy means your reading habits, saved words, and progress stay yours. Learn what language apps collect and how to choose wisely today.</p>
+      </a>
+      <a class="bpost" href="/blog/practice-french-news-reading/">
+        <time datetime="2026-11-06">November 6, 2026</time>
+        <h3>How to Practice French News Reading Daily</h3>
+        <p>Practice French news reading with real stories, smarter word review, and a daily routine that builds practical comprehension without textbook filler now.</p>
+      </a>
+      <a class="bpost" href="/blog/technical-english-reading-guide/">
+        <time datetime="2026-11-04">November 4, 2026</time>
+        <h3>Technical English Reading Guide for Real Articles</h3>
+        <p>A technical English reading guide for understanding articles, saving useful terms, and building vocabulary that holds up in meetings, reports, and work.</p>
+      </a>
+      <a class="bpost" href="/blog/french-reading-fluency-plan/">
+        <time datetime="2026-11-02">November 2, 2026</time>
+        <h3>A French Reading Fluency Plan That Fits Real Life</h3>
+        <p>Build a French reading fluency plan around real news, useful vocabulary, and short daily sessions that make understanding French feel more natural each day.</p>
+      </a>
+      <a class="bpost" href="/blog/does-context-improve-retention/">
+        <time datetime="2026-10-31">October 31, 2026</time>
+        <h3>Does Context Improve Retention for Language Learners?</h3>
+        <p>Does context improve retention? Learn why meaningful news, sentences, and timely review help language learners remember words they can actually use daily.</p>
+      </a>
+    </div>
+    <!-- blog:end -->
   </div>
 </section>
 

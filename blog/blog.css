@@ -80,5 +80,27 @@ h1{font-weight:800;font-size:clamp(2rem,5vw,3.2rem);letter-spacing:-.02em;line-h
 .more-title{font-weight:800;letter-spacing:-.02em;font-size:1.4rem;margin-bottom:24px}
 footer{border-top:1px solid var(--line);padding:38px 0 54px;color:var(--peri-dim)}
 footer .wrap{display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
-.foot-links{display:flex;gap:24px;font-weight:600;font-size:.9rem}
+.foot-links{display:flex;flex-wrap:wrap;gap:12px 24px;font-weight:600;font-size:.9rem}
 .foot-links a:hover{color:var(--cream)}
+
+/* ---- iç linkleme: tüm yazılar listesi, önceki/sonraki ---- */
+.allposts{border-top:1px solid var(--line);margin-top:56px;padding-top:44px}
+.allposts ul{list-style:none;padding:0;margin:0;columns:2;column-gap:40px}
+.allposts li{break-inside:avoid;padding:7px 0}
+.allposts a{color:var(--peri);font-weight:600;font-size:.96rem;line-height:1.4}
+.allposts a:hover{color:var(--cream)}
+@media(max-width:720px){.allposts ul{columns:1}}
+.more-all{margin-top:28px;font-weight:600}
+.more-all a{color:var(--blue)}
+.more-all a:hover{color:var(--cream)}
+.stepnav{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px}
+.step-link{display:block;background:var(--panel);border:1px solid var(--line);border-radius:16px;
+  padding:16px 18px;font-weight:800;font-size:.98rem;line-height:1.35;letter-spacing:-.01em;transition:transform .2s}
+.step-link:hover{transform:translateY(-2px)}
+.step-link span{display:block;color:var(--peri-dim);font-weight:600;font-size:.78rem;
+  letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.step-next{text-align:right}
+@media(max-width:720px){.stepnav{grid-template-columns:1fr}.step-next{text-align:left}}
+/* yukarıdaki çıplak `nav{position:sticky…}` kuralı site üst menüsü içindir;
+   içerik içindeki nav'lar (sayfalama, önceki/sonraki) ona yapışmasın */
+nav.pager,nav.stepnav{position:static;z-index:auto;-webkit-backdrop-filter:none;backdrop-filter:none;background:none;border:0}
