@@ -7,6 +7,13 @@
     <description>Guides on learning languages by reading real news.</description>
     <language>en</language>
     <item>
+      <title>Reading App Privacy: What Your Reading Reveals</title>
+      <link>https://newslearner.com/blog/reading-app-privacy/</link>
+      <guid isPermaLink="true">https://newslearner.com/blog/reading-app-privacy/</guid>
+      <pubDate>Sat, 28 Nov 2026 01:55:03 +0000</pubDate>
+      <description>Reading app privacy protects more than your settings. Learn what reading data reveals, what to check, and how to choose a language app wisely with care.</description>
+    </item>
+    <item>
       <title>Do Articles Teach Grammar? Yes, With a Method</title>
       <link>https://newslearner.com/blog/do-articles-teach-grammar/</link>
       <guid isPermaLink="true">https://newslearner.com/blog/do-articles-teach-grammar/</guid>
@@ -138,13 +145,6 @@
       <guid isPermaLink="true">https://newslearner.com/blog/mobile-learning-privacy-guide/</guid>
       <pubDate>Wed, 21 Oct 2026 01:52:45 +0000</pubDate>
       <description>This mobile learning privacy guide explains what language apps collect, what to question, and how to protect your reading and study history confidently.</description>
-    </item>
-    <item>
-      <title>10 Best French News Sources for Learners</title>
-      <link>https://newslearner.com/blog/best-french-news-sources/</link>
-      <guid isPermaLink="true">https://newslearner.com/blog/best-french-news-sources/</guid>
-      <pubDate>Mon, 19 Oct 2026 01:53:01 +0000</pubDate>
-      <description>Find the best French news sources for real-world reading practice, from plain-language reporting to global analysis, and build vocabulary in context daily.</description>
     </item>
   </channel>
 </rss>
